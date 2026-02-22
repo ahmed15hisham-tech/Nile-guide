@@ -1,0 +1,87 @@
+<!-- forgot-password.component.html -->
+<section class="min-h-screen bg-black text-white">
+  <div class="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md">
+      <div class="rounded-3xl border border-yellow-500/10 bg-[#12100c]/80 p-7 shadow-2xl ring-1 ring-white/10 backdrop-blur">
+        <!-- Top stepper -->
+        <div class="relative mb-10 flex items-center justify-between">
+          <!-- line -->
+          <div class="absolute left-30 right-30 top-1/2 h-px -translate-y-1/2 bg-white/40">
+
+          </div>
+
+          <!-- step 1 -->
+          <div class="relative z-10 flex flex-col items-center gap-2">
+    
+        <div class="flex h-15 w-15 items-center justify-center rounded-full bg-yellow-500/20">
+        <i class="fa-solid fa-envelope text-2xl text-yellow-400"></i>
+        </div>
+            <span class="text-xs text-yellow-300/90">Request Code</span>
+          </div>
+
+          <!-- step 2 -->
+          <div class="relative z-10 flex flex-col items-center gap-2">
+       
+        <div class="flex h-15 w-15 items-center justify-center rounded-full bg-white/5">
+        <i class="fa-solid fa-key text-2xl  text-white/60"></i>
+        </div>
+            <span class="text-xs text-white/50">Reset Password</span>
+          </div>
+        </div>
+
+        <!-- Icon -->
+    
+<div class="mx-auto mb-6 flex h-18 w-18 items-center justify-center rounded-full bg-yellow-500/15">
+  <i class="fa-solid fa-lock text-3xl text-yellow-400"></i>
+</div>
+
+        <!-- Title -->
+        <h1 class="text-center text-3xl font-bold">Forgot Password?</h1>
+        <p class="mt-2 text-center text-sm text-white/60">
+          No worries, we'll send you a reset code.
+        </p>
+
+        <!-- Form -->
+        <form class="mt-8 space-y-5">
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-white/80">Email Address</label>
+
+            <div class="relative">
+              <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/35">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </span>
+
+              <input
+                type="email"
+                placeholder="name@example.com"
+                class="w-full rounded-xl bg-black/40 border border-white/10 py-3 pl-12 pr-4 text-white
+                       placeholder:text-white/30 outline-none
+                       focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20"
+              />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="mt-2 w-full rounded-xl bg-yellow-500 py-3 text-center font-semibold text-black
+                   hover:bg-yellow-400 transition-colors"
+          >
+            Send Reset Code <span class="ml-2">></span>
+          </button>
+
+          <div class="pt-2 text-center">
+            <a
+              href="/auth/login"
+              class="text-sm text-white/70 hover:text-yellow-400 transition-colors"
+            >
+              ← Back to Login
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

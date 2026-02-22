@@ -1,0 +1,94 @@
+<!-- LOGIN PAGE -->
+<section class="min-h-screen bg-black flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-6xl overflow-hidden rounded-3xl bg-[#14120d] shadow-2xl grid lg:grid-cols-2">
+
+    <!-- LEFT SIDE (FORM) -->
+    <div class="p-10 lg:p-14 text-white flex flex-col justify-center">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3 text-yellow-500 mb-8">
+        <i class="fa-solid fa-star text-3xl"></i>
+        <span class="text-lg font-semibold tracking-widest">NileGuide</span>
+      </div>
+
+      <h1 class="text-4xl font-bold mb-3">Welcome Back</h1>
+      <p class="text-white/70 mb-8">
+        Sign in to continue your Egyptian adventure
+      </p>
+
+      <!-- Email -->
+      <label class="text-sm font-medium mb-2 block">Email Address</label>
+      <div class="relative mb-6">
+        <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          class="w-full rounded-xl bg-black/40 border border-white/10 py-3 pl-12 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20"
+        />
+      </div>
+
+      <!-- Password -->
+      <div class="flex items-center justify-between mb-2">
+        <label class="text-sm font-medium">Password</label>
+        <a routerLink="/auth/forgot-password" class="text-sm text-yellow-500 hover:text-yellow-400">Forgot password?</a>
+      </div>
+
+      <div class="relative mb-6">
+        <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
+        <input
+          type="password"
+          placeholder="Enter your password"
+          class="w-full rounded-xl bg-black/40 border border-white/10 py-3 pl-12 pr-12
+           text-white placeholder:text-white/40 focus:outline-none focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20"
+        />
+        <i class="fa-regular fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-white/40 cursor-pointer"></i>
+      </div>
+
+      <!-- Remember -->
+      <label class="flex items-center gap-3 mb-6 text-sm text-white/70">
+        <input type="checkbox" class="h-4 w-4 accent-yellow-500" />
+        Remember me
+      </label>
+
+      <!-- Button -->
+      <button
+        class="w-full rounded-xl cursor-pointer bg-yellow-500 py-3 text-black font-semibold hover:bg-yellow-400 transition-colors"
+      >
+        Sign In
+      </button>
+
+      <!-- Sign up -->
+      <p class="text-center text-white/60 mt-8">
+        Don't have an account?
+        <a routerLink="/auth/register" class="text-yellow-500 hover:text-yellow-400 font-medium">Sign Up</a>
+      </p>
+
+      <!-- Back -->
+      <a routerLink="/home" class="text-center text-white/50 mt-6 hover:text-white/80 text-sm">
+        ← Back to Home
+      </a>
+    </div>
+
+    <!-- RIGHT SIDE (IMAGE) -->
+    <div class="relative hidden lg:block">
+      <img
+        src="/Photo/Luxor.png"
+        alt="Egypt"
+        class="h-full w-full object-cover"
+      />
+
+      <div class="absolute inset-0 bg-black/55 flex flex-col items-center justify-center text-center px-10 text-white">
+        <div class="flex items-center justify-center h-16 w-16 rounded-2xl bg-yellow-500/10 text-yellow-400 mb-6">
+          <i class="fa-solid fa-location-dot text-4xl"></i>
+        </div>
+
+        <h2 class="text-4xl font-bold mb-4">Discover Egypt</h2>
+        <p class="text-white/80 text-lg max-w-md">
+          Plan your perfect Egyptian adventure with our curated experiences,
+          from ancient temples to modern wonders.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
