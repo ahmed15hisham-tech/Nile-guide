@@ -35,10 +35,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
 
   private readonly baseUrl =
-    
-    'https://nileguideapi-dxg8dqgmebajfzcz.uaenorth-01.azurewebsites.net/api/auth';
-    
-
+    'https://nileguideapi-dxg8dqgmebajfzcz.uaenorth-01.azurewebsites.net/api/auth';    
   register(payload: RegisterPayload) {
     return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, payload);
   }
@@ -58,4 +55,15 @@ export class AuthService {
     localStorage.removeItem(STORED_KEYS.USER_TOKEN);
     localStorage.removeItem(STORED_KEYS.USER_ID);
   }
+  forgotPassword(email: string) {
+  return this.http.post(`${this.baseUrl}/forgot-password`, { email });
+}
+verifyResetCode(payload: { email: string; code: string }) {
+  return this.http.post<void>(`${this.baseUrl}/verify-reset-code`, payload);
+}
+
+resetPassword(payload: { email: string; code: string; newPassword: string }) {
+  return this.http.post<void>(`${this.baseUrl}/reset-password`, payload);
+}
+
 }

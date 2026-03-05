@@ -1,7 +1,6 @@
 
-<!-- src/app/features/auth/register/register.component.html -->
-<section class="min-h-screen bg-black flex items-center justify-center px-4 py-10 text-white">
-  <div class="w-full max-w-6xl overflow-hidden rounded-3xl bg-[#14120d] shadow-2xl grid lg:grid-cols-2">
+<section class="min-h-screen  flex items-center justify-center px-4 py-10 text-white">
+  <div class="w-full max-w-6xl border border-yellow-500/10 overflow-hidden rounded-3xl bg-[#14120d] shadow-2xl grid lg:grid-cols-2">
 
     <!-- LEFT -->
     <div class="p-10 lg:p-14 flex flex-col justify-center">
@@ -171,14 +170,14 @@
         </button>
 
         @if (successMessage) {
-          <div class="mt-2 bg-green-200 border-l-4 border-green-500 text-green-800 font-bold p-4 rounded-xl">
+          <div class="mt-2 bg-green-400 border-l-8 border-green-600 text-green-900 font-bold p-4 rounded-xl">
             <p>{{ successMessage }}</p>
             <p>You will be redirected in {{ redirectCounter }} seconds...</p>
           </div>
         }
 
         @if (errorMessage) {
-          <div class="mt-2 bg-red-300 border-l-4 border-red-500 text-black p-4 rounded-xl">
+          <div class="mt-2 bg-red-800 border-l-8 border-red-700 text-red-950 p-4 rounded-xl">
             <p class="font-bold">{{ errorMessage }}</p>
           </div>
         }

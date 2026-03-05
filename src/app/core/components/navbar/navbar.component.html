@@ -17,15 +17,15 @@
       <a
         routerLink="auth/login"
         class="rounded-xl border border-yellow-500 px-6 py-2 text-base font-semibold text-yellow-500
-               hover:bg-yellow-500 hover:text-black transition-colors"
+               hover:bg-yellow-500 hover:text-black duration-300 transition-colors"
       >
         Sign In
       </a>
 
       <a
         routerLink="/activities"
-        class="rounded-xl bg-yellow-600 px-6 py-2 text-base font-semibold text-black
-               hover:bg-yellow-400 transition-colors"
+        class="rounded-xl bg-yellow-500 px-6 py-2 text-base font-semibold text-black
+               hover:bg-black hover:text-yellow-500 border hover:border-yellow-500 duration-300 transition-colors"
       >
         Get Started
       </a>
@@ -107,7 +107,7 @@
         <!-- Mobile buttons -->
         <li class="mt-4 flex flex-col gap-3 md:hidden ">
           <a
-            routerLink="/login"
+            routerLink="/auth/login"
             (click)="closeMobileMenu()"
             class="w-full rounded-xl border border-yellow-500 px-6 py-3 text-center text-base font-semibold text-yellow-500
                    hover:bg-yellow-500 hover:text-black transition-colors"
@@ -118,8 +118,8 @@
           <a
             routerLink="/activities"
             (click)="closeMobileMenu()"
-            class="w-full rounded-xl bg-yellow-600 px-6 py-3 text-center text-base font-semibold text-black
-                   hover:bg-yellow-400 transition-colors"
+            class="w-full rounded-xl bg-yellow-500 px-6 py-3 text-center text-base font-semibold text-black
+                   hover:bg-black hover:text-yellow-500 border hover:border-yellow-500 duration-300 transition-colors"
           >
             Get Started
           </a>

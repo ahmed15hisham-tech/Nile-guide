@@ -23,3 +23,12 @@
   to{ transform:scaleX(1); transform-origin:left; }
 }
 
+
+@layer components{
+  .font-1{
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+
+
