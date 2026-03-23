@@ -1,1 +1,205 @@
-<p class="pt-18">map works!</p>
+<div class=" bg-[#12100d] pt-20 text-white">
+  <div class="mx-auto max-w-400 px-4 py-8 md:px-6 lg:px-8">
+
+    <!-- Header -->
+    <div class="mb-5 flex flex-col gap-4 border-b border-[#3a3122] pb-4 lg:flex-row lg:items-center lg:justify-between">
+      <h1 class="text-3xl font-light tracking-wide sm:text-4xl md:text-5xl">
+        <span class="text-white">Interactive</span>
+        <span class="text-yellow-400"> Map</span>
+      </h1>
+
+ <div class="w-full lg:w-auto">
+  <div class="relative">
+    <select
+      class="h-12 w-full appearance-none rounded-xl border border-yellow-400 bg-[#27241b] px-4 pr-12 text-base text-white outline-none transition focus:border-yellow-400 lg:min-w-62.5">
+      <option value="all">All Cities</option>
+      <option value="cairo">Cairo</option>
+      <option value="luxor">Luxor</option>
+      <option value="aswan">Aswan</option>
+      <option value="sharm">Sharm El-Sheikh</option>
+    </select>
+  </div>
+</div>
+    </div>
+
+    <!-- Content -->
+    <div class="grid items-start gap-5 xl:grid-cols-[2fr_1fr]">
+
+      <!-- Map Section -->
+  <div class="relative overflow-hidden rounded-[22px] border border-[#3a3122] bg-[#1c1912] h-105 sm:h-130 lg:h-150">
+
+  <!-- Background Image -->
+  <img
+    src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=1600&auto=format&fit=crop"
+    alt="Map"
+    class="h-full w-full object-cover scale-110 opacity-35" />
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black/25"></div>
+
+  <!-- Extra vignette -->
+  <div class="absolute inset-0 bg-linear-to-b from-black/20 via-black/10 to-black/35"></div>
+
+  <!-- Top Left Controls -->
+  <div class="absolute left-4 top-4 z-20 flex items-center gap-4">
+    <button
+      class="flex h-15.5 w-15.5 items-center justify-center rounded-2xl border border-white/10 bg-[#2a241a]/95 text-yellow-400 shadow-lg transition hover:bg-[#332c20]">
+      <i class="fa-solid fa-location-crosshairs text-[28px]"></i>
+    </button>
+
+    <button
+      class="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#2a241a]/95 px-6 py-4 text-white shadow-lg transition hover:bg-[#332c20]">
+      <i class="fa-solid fa-wand-magic-sparkles text-[20px]"></i>
+      <span class="text-[20px] font-bold leading-none">View</span>
+    </button>
+  </div>
+
+  <!-- Pins -->
+  <div class="absolute left-[52%] top-[20%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
+
+  <div class="absolute left-[66%] top-[42%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
+
+  <div class="absolute left-[59%] top-[63%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
+
+  <div class="absolute left-[60%] top-[79%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
+
+  <div class="absolute left-[54%] top-[95%] h-8 w-8 -translate-y-full rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
+
+  <!-- Fullscreen -->
+  <button
+    class="absolute right-4 top-4 z-20 flex h-14 w-14 items-center justify-center rounded-3xl bg-white text-black shadow-lg transition hover:bg-zinc-100">
+    <i class="fa-solid fa-expand text-[22px]"></i>
+  </button>
+
+  <!-- Zoom Controls -->
+  <div class="absolute bottom-7 right-4 z-20 overflow-hidden rounded-[22px] bg-white text-black shadow-xl">
+    <button
+      class="flex h-15.5 w-15.5 items-center justify-center border-b border-zinc-200 text-[34px] transition hover:bg-zinc-100">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <button
+      class="flex h-15.5 w-15.5 items-center justify-center text-[34px] transition hover:bg-zinc-100">
+      <i class="fa-solid fa-minus"></i>
+    </button>
+  </div>
+
+
+  <!-- Watermark -->
+  <div class="absolute bottom-3 left-3 z-20 text-[18px] font-semibold text-white">
+    Google
+  </div>
+</div>
+
+      <!-- Itinerary -->
+      <div class="self-start rounded-2xl border border-[#3a3122] bg-[#1c1912] p-4 sm:p-5 lg:p-6">
+        <div class="mb-5 flex items-center justify-between border-b border-[#3a3122] pb-4">
+          <h2 class="text-2xl font-medium text-white">Itinerary</h2>
+
+          <span class="rounded-full bg-yellow-400/10 px-4 py-1.5 text-sm font-semibold text-yellow-400">
+            5 Items
+          </span>
+        </div>
+
+        <div class="max-h-120 custom-scroll space-y-4 overflow-y-auto pr-1">
+
+          <!-- Item 1 -->
+          <div
+            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
+            <img
+              src="/Photo/Cairo.png"
+              alt="Pyramids of Giza Tour"
+              class="h-24 w-24 rounded-xl object-cover shrink-0" />
+
+            <div class="min-w-0">
+              <h3 class="truncate text-xl font-bold text-white">Pyramids of Giza Tour</h3>
+              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
+                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
+                <span>Cairo</span>
+                <span class="text-zinc-500">•</span>
+                <span>Day 1</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div
+            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
+            <img
+              src="/Photo/Cairo.png"
+              alt="Egyptian Museum"
+              class="h-24 w-24 rounded-xl object-cover shrink-0" />
+
+            <div class="min-w-0">
+              <h3 class="truncate text-xl font-bold text-white">Egyptian Museum</h3>
+              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
+                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
+                <span>Cairo</span>
+                <span class="text-zinc-500">•</span>
+                <span>Day 2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div
+            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
+            <img
+              src="/Photo/Cairo.png"
+              alt="Khan El-Khalili Bazaar"
+              class="h-24 w-24 rounded-xl object-cover shrink-0" />
+
+            <div class="min-w-0">
+              <h3 class="truncate text-xl font-bold text-white">Khan El-Khalili Bazaar</h3>
+              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
+                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
+                <span>Cairo</span>
+                <span class="text-zinc-500">•</span>
+                <span>Day 3</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div
+            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
+            <img
+            src="/Photo/Cairo.png"
+              alt="Hot Air Balloon Ride"
+              class="h-24 w-24 rounded-xl object-cover shrink-0" />
+
+            <div class="min-w-0">
+              <h3 class="truncate text-xl font-bold text-white">Hot Air Balloon Ride</h3>
+              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
+                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
+                <span>Luxor</span>
+                <span class="text-zinc-500">•</span>
+                <span>Day 4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 5 -->
+          <div
+            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
+            <img
+              src="/Photo/Cairo.png"
+              alt="Abu Simbel Tour"
+              class="h-24 w-24 rounded-xl object-cover shrink-0" />
+
+            <div class="min-w-0">
+              <h3 class="truncate text-xl font-bold text-white">Abu Simbel Tour</h3>
+              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
+                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
+                <span>Aswan</span>
+                <span class="text-zinc-500">•</span>
+                <span>Day 5</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

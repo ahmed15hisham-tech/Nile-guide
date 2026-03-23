@@ -34,8 +34,7 @@ export interface LoginResponse {
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  private readonly baseUrl =
-    'https://nileguideapi-dxg8dqgmebajfzcz.uaenorth-01.azurewebsites.net/api/auth';    
+  private readonly baseUrl = STORED_KEYS.baseUrl + '/auth';    
   register(payload: RegisterPayload) {
     return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, payload);
   }
@@ -50,7 +49,7 @@ export class AuthService {
       localStorage.setItem(STORED_KEYS.USER_ID, String(userId));
     }
   }
-
+  
   clearAuth() {
     localStorage.removeItem(STORED_KEYS.USER_TOKEN);
     localStorage.removeItem(STORED_KEYS.USER_ID);

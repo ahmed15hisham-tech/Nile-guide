@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-activities',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './activities.component.html',
-  styleUrls: ['./activities.component.css'],
+  styleUrl: './activities.component.css',
 })
-export class ActivitiesComponent {}
+export class ActivitiesComponent {
+
+}

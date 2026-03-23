@@ -6,6 +6,7 @@ import { Home_ROUTES } from './features/home/home.routes';
 import { ActivitiesComponent } from './features/activities/activities.component';
 import { ScheduleComponent } from './features/schedule/schedule.component';
 import { MapComponent } from './features/map/map.component';
+import { DetailsComponent } from './features/details/details.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,6 +20,7 @@ export const routes: Routes = [
       { path: 'activities', component: ActivitiesComponent },
      { path: 'schedule', component: ScheduleComponent },
      { path: 'map', component: MapComponent },
+     { path: 'Details', component: DetailsComponent },
     ],
   },
 

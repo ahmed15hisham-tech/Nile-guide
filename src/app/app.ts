@@ -27,7 +27,11 @@ constructor(private router: Router) {
     .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
     .subscribe((e) => {
       const url = e.urlAfterRedirects ?? e.url;
-      this.showNavbarFooter = !url.startsWith('/auth');
+
+      this.showNavbarFooter =
+        !url.startsWith('/auth') &&
+        !url.startsWith('/Details');
     });
 }
+
 }

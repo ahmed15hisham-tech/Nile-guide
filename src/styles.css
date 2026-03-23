@@ -5,4 +5,6 @@
 @source "../node_modules/flowbite";
 @import "tailwindcss";
 @import "./styles/base.css";
+@import "./styles/card.css";
+@import "./styles/thems.css";
 @import"./styles/toaster.css";
