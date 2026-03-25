@@ -30,6 +30,15 @@
 .border-default-medium{
   border-color: #e0d8c2!important;
 }
+   .hover\:bg-neutral-tertiary-medium:hover {
+    background-color: #4b3d10 !important;
+  }
+  .bg-brand {
+    background-color: #f2b90d !important;
+  }
+  .bg-neutral-tertiary-medium {
+    background-color: #4B3D10 !important;
+  }
 }
 
 @keyframes slideIn{
