@@ -7,6 +7,8 @@ import { ActivitiesComponent } from './features/activities/activities.component'
 import { ScheduleComponent } from './features/schedule/schedule.component';
 import { MapComponent } from './features/map/map.component';
 import { DetailsComponent } from './features/details/details.component';
+import { WishlistComponent } from './features/wishlist/wishlist.component';
+import { ProfileComponent } from './features/profile/profile.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -21,6 +23,8 @@ export const routes: Routes = [
      { path: 'schedule', component: ScheduleComponent },
      { path: 'map', component: MapComponent },
      { path: 'Details', component: DetailsComponent },
+     { path: 'wishlist', component: WishlistComponent },
+     { path: 'profile', component: ProfileComponent },
     ],
   },
 

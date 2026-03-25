@@ -38,6 +38,7 @@
     "@ngx-translate/http-loader": "^17.0.0",
     "express": "^5.1.0",
     "flowbite": "^4.0.1",
+    "flowbite-datepicker": "^2.0.0",
     "ngx-spinner": "^21.0.0",
     "ngx-toastr": "^20.0.5",
     "rxjs": "~7.8.0",

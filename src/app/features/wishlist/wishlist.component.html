@@ -1,0 +1,252 @@
+<div class="min-h-screen pt-16 bg-[#12100d] text-white">
+  <!-- Top Hero -->
+  <section class="bg-linear-to-r from-[#1c1811] via-[#18150f] to-[#201c14]">
+    <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+        <div class="flex items-start gap-4">
+          <div class="mt-2 text-yellow-500">
+            <i class="fa-regular fa-heart text-4xl sm:text-5xl"></i>
+          </div>
+
+          <div>
+            <h1 class="text-4xl font-bold font-serif leading-none py-5 text-white sm:text-5xl">
+              My Wishlist
+            </h1>
+            <p class="mt-2 text-lg text-white/70">
+              Activities you want to experience
+            </p>
+          </div>
+        </div>
+
+        <button
+          class="inline-flex items-center cursor-pointer justify-center gap-2 rounded-2xl border border-red-500 px-5 py-3 text-base font-semibold
+           text-red-500 transition hover:text-white hover:bg-red-500">
+          <i class="fa-solid fa-trash-can"></i>
+          Clear All
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl">
+      <!-- Top Row -->
+      <div class="mb-8 flex items-center justify-between gap-4">
+        <h2 class="text-2xl font-bold text-white sm:text-3xl">3 Activities Saved</h2>
+
+        <button class="text-lg font-semibold text-yellow-400 cursor-pointer transition hover:text-red-500">
+          Clear All
+        </button>
+      </div>
+
+        <!-- Cards Grid -->
+        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+
+          <!-- Card 1 -->
+          <article class="overflow-hidden card-activity rounded-2xl border border-[#3a3427] bg-[#27241b] p-3 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+            <div class="relative h-40 overflow-hidden rounded">
+              <img src="/Photo/Alexandria.png" alt="Grand Egyptian Museum VIP" class="h-full w-full object-cover card-activity__image" />
+              <button class="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full
+               border border-white/20 bg-[#3b4a52] text-white backdrop-blur-sm">
+                <i class="fa-regular fa-heart text-lg"></i>
+              </button>
+              <div class="absolute right-3 top-3 flex items-center gap-2 rounded-full bg-[#4b4a45]/90 px-3 py-1 text-[11px] font-semibold text-white">
+                <span class="h-2 w-2 rounded-full bg-green-400"></span>
+                ACTIVE
+              </div>
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-[11px] font-bold uppercase tracking-wide text-yellow-400">Museum</span>
+                <div class="flex items-center gap-1 text-sm text-white">
+                  <i class="fa-solid fa-star text-[11px] text-yellow-400"></i>
+                  <span class="font-medium">5.0</span>
+                  <span class="text-xs text-zinc-400">(89)</span>
+                </div>
+              </div>
+
+              <h3 class="mt-2 text-[17px] font-semibold leading-tight text-white">
+                Grand Egyptian Museum VIP
+              </h3>
+
+              <div class="mt-3 inline-flex items-center gap-2 rounded-md border border-green-500/30 bg-green-500/10 px-2.5 py-1.5 text-xs font-medium text-green-400">
+                <i class="fa-regular fa-circle-check text-[11px]"></i>
+                No ID Needed
+              </div>
+
+              <p class="mt-4 line-clamp-2 text-sm leading-6 text-zinc-400">
+                Early access to Egypt’s iconic museum with a curated VIP cultural experience.
+              </p>
+
+              <div class="my-4 border-t border-[#3a3427]"></div>
+
+              <div class="flex justify-between">
+                <p class="text-sm text-zinc-400">Starting from</p>
+                <p class="mt-1 text-[20px] font-bold leading-none text-zinc-400">
+                  $150</p>
+              </div>
+
+              <div class="my-4 border-t border-[#3a3427]"></div>
+
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-zinc-400">Book via:</span>
+                <div class="flex items-center gap-4 text-yellow-400">
+                  <i class="fa-solid fa-link text-sm"></i>
+                  <i class="fa-solid fa-plane-departure text-sm"></i>
+                  <i class="fa-solid fa-globe text-sm"></i>
+                </div>
+              </div>
+
+              <div class="mt-5 space-y-3">
+                <button class="w-full rounded-xl bg-yellow-400 py-3 text-sm font-bold text-black transition hover:bg-yellow-300">
+                  Add To Plan
+                </button>
+                <button 
+                routerLink="/Details"
+                class="w-full rounded-xl border cursor-pointer border-[#3a3427] bg-transparent py-3 text-sm font-semibold text-white transition hover:bg-white/5">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+         <article class="overflow-hidden card-activity rounded-2xl border border-[#3a3427] bg-[#27241b] p-3 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+            <div class="relative h-40 overflow-hidden rounded">
+              <img src="/Photo/Cairo.png" alt="Grand Egyptian Museum VIP" class="h-full w-full object-cover card-activity__image" />
+              <button class="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full
+               border border-white/20 bg-[#3b4a52] text-white backdrop-blur-sm">
+                <i class="fa-regular fa-heart text-lg"></i>
+              </button>
+              <div class="absolute right-3 top-3 flex items-center gap-2 rounded-full bg-[#4b4a45]/90 px-3 py-1 text-[11px] font-semibold text-white">
+                <span class="h-2 w-2 rounded-full bg-green-400"></span>
+                ACTIVE
+              </div>
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-[11px] font-bold uppercase tracking-wide text-yellow-400">Museum</span>
+                <div class="flex items-center gap-1 text-sm text-white">
+                  <i class="fa-solid fa-star text-[11px] text-yellow-400"></i>
+                  <span class="font-medium">5.0</span>
+                  <span class="text-xs text-zinc-400">(89)</span>
+                </div>
+              </div>
+
+              <h3 class="mt-2 text-[17px] font-semibold leading-tight text-white">
+                Grand Egyptian Museum VIP
+              </h3>
+
+              <div class="mt-3 inline-flex items-center gap-2 rounded-md border border-green-500/30 bg-green-500/10 px-2.5 py-1.5 text-xs font-medium text-green-400">
+                <i class="fa-regular fa-circle-check text-[11px]"></i>
+                No ID Needed
+              </div>
+
+              <p class="mt-4 line-clamp-2 text-sm leading-6 text-zinc-400">
+                Early access to Egypt’s iconic museum with a curated VIP cultural experience.
+              </p>
+
+              <div class="my-4 border-t border-[#3a3427]"></div>
+
+              <div class="flex justify-between">
+                <p class="text-sm text-zinc-400">Starting from</p>
+                <p class="mt-1 text-[20px] font-bold leading-none text-zinc-400">$150</p>
+              </div>
+
+              <div class="my-4 border-t border-[#3a3427]"></div>
+
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-zinc-400">Book via:</span>
+                <div class="flex items-center gap-4 text-yellow-400">
+                  <i class="fa-solid fa-link text-sm"></i>
+                  <i class="fa-solid fa-plane-departure text-sm"></i>
+                  <i class="fa-solid fa-globe text-sm"></i>
+                </div>
+              </div>
+
+              <div class="mt-5 space-y-3">
+                <button class="w-full rounded-xl bg-yellow-400 py-3 text-sm font-bold text-black transition hover:bg-yellow-300">
+                  Add To Plan
+                </button>
+                <button class="w-full rounded-xl border border-[#3a3427] bg-transparent py-3 text-sm font-semibold text-white transition hover:bg-white/5">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3-->
+           <article class="overflow-hidden card-activity rounded-2xl border border-[#3a3427] bg-[#27241b] p-3 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+            <div class="relative h-40 overflow-hidden rounded">
+              <img src="/Photo/Aswan.png" alt="Grand Egyptian Museum VIP" class="h-full w-full object-cover card-activity__image" />
+              <button class="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full
+               border border-white/20 bg-[#3b4a52] text-white backdrop-blur-sm">
+                <i class="fa-regular fa-heart text-lg"></i>
+              </button>
+              <div class="absolute right-3 top-3 flex items-center gap-2 rounded-full bg-[#4b4a45]/90 px-3 py-1 text-[11px] font-semibold text-white">
+                <span class="h-2 w-2 rounded-full bg-green-400"></span>
+                ACTIVE
+              </div>
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-[11px] font-bold uppercase tracking-wide text-yellow-400">Museum</span>
+                <div class="flex items-center gap-1 text-sm text-white">
+                  <i class="fa-solid fa-star text-[11px] text-yellow-400"></i>
+                  <span class="font-medium">5.0</span>
+                  <span class="text-xs text-zinc-400">(89)</span>
+                </div>
+              </div>
+
+              <h3 class="mt-2 text-[17px] font-semibold leading-tight text-white">
+                Grand Egyptian Museum VIP
+              </h3>
+
+              <div class="mt-3 inline-flex items-center gap-2 rounded-md border border-green-500/30 bg-green-500/10 px-2.5 py-1.5 text-xs font-medium text-green-400">
+                <i class="fa-regular fa-circle-check text-[11px]"></i>
+                No ID Needed
+              </div>
+
+              <p class="mt-4 line-clamp-2 text-sm leading-6 text-zinc-400">
+                Early access to Egypt’s iconic museum with a curated VIP cultural experience.
+              </p>
+
+              <div class="my-4 border-t border-[#3a3427]"></div>
+
+              <div class="flex justify-between">
+                <p class="text-sm text-zinc-400">Starting from</p>
+                <p class="mt-1 text-[20px] font-bold leading-none text-zinc-400">$150</p>
+              </div>
+
+              <div class="my-4 border-t border-[#3a3427]"></div>
+
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-zinc-400">Book via:</span>
+                <div class="flex items-center gap-4 text-yellow-400">
+                  <i class="fa-solid fa-link text-sm"></i>
+                  <i class="fa-solid fa-plane-departure text-sm"></i>
+                  <i class="fa-solid fa-globe text-sm"></i>
+                </div>
+              </div>
+
+              <div class="mt-5 space-y-3">
+                <button class="w-full rounded-xl bg-yellow-400 py-3 text-sm font-bold text-black transition hover:bg-yellow-300">
+                  Add To Plan
+                </button>
+                <button class="w-full rounded-xl border border-[#3a3427] bg-transparent py-3 text-sm font-semibold text-white transition hover:bg-white/5">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </article>
+
+    
+
+        </div>
+    </div>
+  </section>
+</div>

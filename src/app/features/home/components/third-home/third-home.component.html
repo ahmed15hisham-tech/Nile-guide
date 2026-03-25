@@ -97,26 +97,54 @@
         </p>
 
         <!-- form -->
-        <form class="mx-auto mt-10 flex max-w-xl flex-col gap-3 sm:flex-row sm:gap-4">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            class="h-12 w-full rounded-xl border border-white/10 bg-black/35 px-5 text-white placeholder:text-white/40
-                   outline-none focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20"
-          />
 
-          <button
-            type="button"
-            class="h-12 rounded-xl bg-yellow-500 px-8 font-semibold text-black hover:bg-yellow-400 transition-colors"
-          >
-            Subscribe
-          </button>
-        </form>
 
-        <p class="mt-4 flex items-center justify-center gap-2 text-sm text-white/55">
+<form
+  (ngSubmit)="subscribe()"
+  class="mx-auto mt-10 flex max-w-xl flex-col gap-3 sm:flex-row sm:gap-4"
+>
+  <input
+    type="email"
+    name="email"
+    [(ngModel)]="email"
+    placeholder="Enter your email"
+    class="h-12 w-full rounded-xl border border-white/10 bg-black/35 px-5 text-white placeholder:text-white/40
+           outline-none focus:border-yellow-500/50 focus:ring-2 focus:ring-yellow-500/20"
+    required
+    email
+  />
+
+  <button
+    type="submit"
+    [disabled]="isLoading"
+    class="h-12 cursor-pointer rounded-xl bg-yellow-500 px-8 font-semibold text-black transition-colors hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-60"
+  >
+    {{ isLoading ? 'Subscribing...' : 'Subscribe' }}
+  </button>
+  
+</form>
+@if (successMessage) {
+  <div
+    class="message-box mx-auto mt-6 max-w-xl rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-200"
+    [class.show]="showSuccessMessage"
+  >
+    {{ successMessage }}
+  </div>
+}
+
+@if (errorMessage) {
+  <div
+    class="message-box mx-auto mt-6 max-w-xl rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+    [class.show]="showErrorMessage"
+  >
+    {{ errorMessage }}
+  </div>
+}
+
+      <!--   <p class="mt-4 flex items-center justify-center gap-2 text-sm text-white/55">
           <span class="text-yellow-400">🔒</span>
           We respect your privacy. Unsubscribe anytime.
-        </p>
+        </p> -->
       </div>
     </div>
   </div>

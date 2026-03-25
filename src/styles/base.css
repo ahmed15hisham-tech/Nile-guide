@@ -17,6 +17,20 @@
     animation:slideIn 0.5s ease forwards;
   }
 }
+@layer components{
+  .bg-neutral-primary-medium{
+    background-color:#27241b!important;
+}
+.text-body{
+  color: #e0d8c2!important;
+}
+.text-heading{
+ color: #e0d8c2!important;;
+}
+.border-default-medium{
+  border-color: #e0d8c2!important;
+}
+}
 
 @keyframes slideIn{
   from{ transform:scaleX(0); transform-origin:left; }

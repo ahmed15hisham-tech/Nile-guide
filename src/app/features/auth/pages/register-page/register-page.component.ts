@@ -46,6 +46,7 @@ export class RegisterPageComponent {
   errorMessage = '';
   successMessage = '';
   redirectCounter = 3;
+   showPassword = false;
 
   registerForm = this.fb.group(
     {
@@ -76,6 +77,16 @@ export class RegisterPageComponent {
   get f() {
     return this.registerForm.controls;
   }
+
+showConfirmPassword = false;
+
+togglePassword(): void {
+  this.showPassword = !this.showPassword;
+}
+
+toggleConfirmPassword(): void {
+  this.showConfirmPassword = !this.showConfirmPassword;
+}
 
   private refreshView(): void {
     try {
