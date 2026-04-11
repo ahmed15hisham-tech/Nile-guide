@@ -8,3 +8,6 @@
 @import "./styles/card.css";
 @import "./styles/thems.css";
 @import"./styles/toaster.css";
+html {
+  scroll-behavior: smooth;
+}

@@ -9,6 +9,10 @@ import { MapComponent } from './features/map/map.component';
 import { DetailsComponent } from './features/details/details.component';
 import { WishlistComponent } from './features/wishlist/wishlist.component';
 import { ProfileComponent } from './features/profile/profile.component';
+import { TermsOfServiceComponent } from './features/terms-of-service/terms-of-service.component';
+import { HelpCenterComponent } from './features/help-center/help-center.component';
+import { ContactComponent } from './features/contact/contact.component';
+import { PrivacyComponent } from './features/privacy/privacy.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -25,6 +29,11 @@ export const routes: Routes = [
      { path: 'Details', component: DetailsComponent },
      { path: 'wishlist', component: WishlistComponent },
      { path: 'profile', component: ProfileComponent },
+     { path: 'terms', component: TermsOfServiceComponent },
+     { path: 'help', component: HelpCenterComponent },
+     { path: 'contact', component: ContactComponent },
+     { path: 'privacy', component: PrivacyComponent },
+
     ],
   },
 
