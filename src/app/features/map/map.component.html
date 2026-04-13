@@ -1,205 +1,128 @@
-<div class=" bg-[#12100d] pt-20 text-white">
-  <div class="mx-auto max-w-400 px-4 py-8 md:px-6 lg:px-8">
+
+<div class="bg-[#12100d] pt-20 text-white min-h-screen">
+  <div class="mx-auto max-w-7xl px-4 py-8 flex flex-col" style="height: calc(100vh - 80px);">
 
     <!-- Header -->
-    <div class="mb-5 flex flex-col gap-4 border-b border-[#3a3122] pb-4 lg:flex-row lg:items-center lg:justify-between">
-      <h1 class="text-3xl font-light tracking-wide sm:text-4xl md:text-5xl">
-        <span class="text-white">Interactive</span>
-        <span class="text-yellow-400"> Map</span>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-[#3a3122] pb-4">
+      <h1 class="text-3xl md:text-4xl font-heading text-white">
+        Interactive <span class="text-yellow-400">Map</span>
       </h1>
 
- <div class="w-full lg:w-auto">
-  <div class="relative">
-    <select
-      class="h-12 w-full appearance-none rounded-xl border border-yellow-400 bg-[#27241b] px-4 pr-12 text-base text-white outline-none transition focus:border-yellow-400 lg:min-w-62.5">
-      <option value="all">All Cities</option>
-      <option value="cairo">Cairo</option>
-      <option value="luxor">Luxor</option>
-      <option value="aswan">Aswan</option>
-      <option value="sharm">Sharm El-Sheikh</option>
-    </select>
-  </div>
-</div>
+      <!-- City Filter -->
+      <div class="relative">
+        <select
+          [(ngModel)]="selectedCity"
+          (ngModelChange)="onCityChange()"
+          class="appearance-none bg-[#27241b] border border-[#3a3122] text-white py-2 pl-4 pr-10 rounded-xl focus:outline-none focus:border-yellow-400 transition-colors cursor-pointer min-w-50">
+          <option value="all">All Cities</option>
+          <option value="Cairo">Cairo</option>
+          <option value="Luxor">Luxor</option>
+          <option value="Aswan">Aswan</option>
+          <option value="Sharm El-Sheikh">Sharm El-Sheikh</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-yellow-400">
+          <i class="fa-solid fa-chevron-down text-sm"></i>
+        </div>
+      </div>
     </div>
 
-    <!-- Content -->
-    <div class="grid items-start gap-5 xl:grid-cols-[2fr_1fr]">
+    <!-- Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-1 overflow-hidden">
 
-      <!-- Map Section -->
-  <div class="relative overflow-hidden rounded-[22px] border border-[#3a3122] bg-[#1c1912] h-105 sm:h-130 lg:h-150">
+      <!-- Map Area -->
+      <div class="order-1 lg:order-1 lg:col-span-2 bg-[#1c1912] border border-[#3a3122] rounded-[22px] relative overflow-hidden h-105 lg:h-full shadow-lg">
 
-  <!-- Background Image -->
-  <img
-    src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=1600&auto=format&fit=crop"
-    alt="Map"
-    class="h-full w-full object-cover scale-110 opacity-35" />
+        <!-- Google Map Container -->
+        <div #mapContainer class="w-full h-full"></div>
 
-  <!-- Dark overlay -->
-  <div class="absolute inset-0 bg-black/25"></div>
+        <!-- Map Controls -->
+        <div class="absolute top-4 left-4 flex gap-2 z-10">
+          <button
+            (click)="centerMap()"
+            title="Center Map"
+            class="bg-[#2a241a]/90 backdrop-blur-sm border border-white/10 text-yellow-400 p-2 rounded-xl hover:bg-[#332c20] transition-colors shadow-lg flex items-center justify-center h-11 w-11">
+            <i class="fa-solid fa-location-crosshairs text-lg"></i>
+          </button>
+          <button
+            (click)="toggleMapType()"
+            class="bg-[#2a241a]/90 backdrop-blur-sm border border-white/10 text-white px-4 py-2 rounded-xl hover:bg-[#332c20] hover:text-yellow-400 transition-colors text-sm font-bold shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-satellite-dish text-base"></i>
+            <span>View</span>
+          </button>
+        </div>
+      </div>
 
-  <!-- Extra vignette -->
-  <div class="absolute inset-0 bg-linear-to-b from-black/20 via-black/10 to-black/35"></div>
+      <!-- Itinerary List -->
+      <div class="order-2 lg:order-2 bg-[#1c1912] border border-[#3a3122] rounded-2xl p-4 sm:p-5 flex flex-col gap-4 shadow-lg overflow-hidden h-[420px] lg:h-full">
 
-  <!-- Top Left Controls -->
-  <div class="absolute left-4 top-4 z-20 flex items-center gap-4">
-    <button
-      class="flex h-15.5 w-15.5 items-center justify-center rounded-2xl border border-white/10 bg-[#2a241a]/95 text-yellow-400 shadow-lg transition hover:bg-[#332c20]">
-      <i class="fa-solid fa-location-crosshairs text-[28px]"></i>
-    </button>
-
-    <button
-      class="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#2a241a]/95 px-6 py-4 text-white shadow-lg transition hover:bg-[#332c20]">
-      <i class="fa-solid fa-wand-magic-sparkles text-[20px]"></i>
-      <span class="text-[20px] font-bold leading-none">View</span>
-    </button>
-  </div>
-
-  <!-- Pins -->
-  <div class="absolute left-[52%] top-[20%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
-
-  <div class="absolute left-[66%] top-[42%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
-
-  <div class="absolute left-[59%] top-[63%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
-
-  <div class="absolute left-[60%] top-[79%] h-8 w-8 rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
-
-  <div class="absolute left-[54%] top-[95%] h-8 w-8 -translate-y-full rounded-full border-4 border-white bg-yellow-400 shadow-[0_0_0_5px_rgba(250,204,21,0.28)]"></div>
-
-  <!-- Fullscreen -->
-  <button
-    class="absolute right-4 top-4 z-20 flex h-14 w-14 items-center justify-center rounded-3xl bg-white text-black shadow-lg transition hover:bg-zinc-100">
-    <i class="fa-solid fa-expand text-[22px]"></i>
-  </button>
-
-  <!-- Zoom Controls -->
-  <div class="absolute bottom-7 right-4 z-20 overflow-hidden rounded-[22px] bg-white text-black shadow-xl">
-    <button
-      class="flex h-15.5 w-15.5 items-center justify-center border-b border-zinc-200 text-[34px] transition hover:bg-zinc-100">
-      <i class="fa-solid fa-plus"></i>
-    </button>
-
-    <button
-      class="flex h-15.5 w-15.5 items-center justify-center text-[34px] transition hover:bg-zinc-100">
-      <i class="fa-solid fa-minus"></i>
-    </button>
-  </div>
-
-
-  <!-- Watermark -->
-  <div class="absolute bottom-3 left-3 z-20 text-[18px] font-semibold text-white">
-    Google
-  </div>
-</div>
-
-      <!-- Itinerary -->
-      <div class="self-start rounded-2xl border border-[#3a3122] bg-[#1c1912] p-4 sm:p-5 lg:p-6">
-        <div class="mb-5 flex items-center justify-between border-b border-[#3a3122] pb-4">
-          <h2 class="text-2xl font-medium text-white">Itinerary</h2>
-
-          <span class="rounded-full bg-yellow-400/10 px-4 py-1.5 text-sm font-semibold text-yellow-400">
-            5 Items
+        <!-- List Header -->
+        <div class="flex items-center justify-between border-b border-[#3a3122] pb-2 shrink-0">
+          <h2 class="text-xl font-heading text-white">Itinerary</h2>
+          <span class="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded-full">
+            {{ filteredItems.length }} Items
           </span>
         </div>
 
-        <div class="max-h-120 custom-scroll space-y-4 overflow-y-auto pr-1">
+        <!-- Schedule Items -->
+        <div class="custom-scroll space-y-3 overflow-y-auto pr-1 flex-1">
 
-          <!-- Item 1 -->
-          <div
-            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
-            <img
-              src="/Photo/Cairo.png"
-              alt="Pyramids of Giza Tour"
-              class="h-24 w-24 rounded-xl object-cover shrink-0" />
-
-            <div class="min-w-0">
-              <h3 class="truncate text-xl font-bold text-white">Pyramids of Giza Tour</h3>
-              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
-                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
-                <span>Cairo</span>
-                <span class="text-zinc-500">•</span>
-                <span>Day 1</span>
+          <!-- Loading Skeleton -->
+          <ng-container *ngIf="isLoading">
+            <div *ngFor="let i of [1,2,3,4]"
+              class="flex gap-3 p-3 rounded-2xl border border-white/10 bg-[#211d16] animate-pulse">
+              <div class="w-20 h-20 rounded-xl bg-[#2a241a] shrink-0"></div>
+              <div class="flex flex-col justify-center gap-2 grow">
+                <div class="h-4 bg-[#2a241a] rounded-lg w-3/4"></div>
+                <div class="h-3 bg-[#2a241a] rounded-lg w-1/2"></div>
               </div>
             </div>
-          </div>
+          </ng-container>
 
-          <!-- Item 2 -->
-          <div
-            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
-            <img
-              src="/Photo/Cairo.png"
-              alt="Egyptian Museum"
-              class="h-24 w-24 rounded-xl object-cover shrink-0" />
+          <ng-container *ngIf="!isLoading && filteredItems.length > 0; else emptyState">
+            <div
+              *ngFor="let item of filteredItems"
+              (click)="selectItem(getOriginalIndex(item))"
+              class="group flex gap-3 p-3 rounded-2xl border cursor-pointer transition-all duration-300 relative overflow-hidden"
+              [ngClass]="isSelected(getOriginalIndex(item))
+                ? 'border-yellow-400 bg-yellow-400/10 ring-1 ring-yellow-400/50'
+                : 'border-white/10 bg-[#211d16] hover:bg-[#2a241a]'">
 
-            <div class="min-w-0">
-              <h3 class="truncate text-xl font-bold text-white">Egyptian Museum</h3>
-              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
-                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
-                <span>Cairo</span>
-                <span class="text-zinc-500">•</span>
-                <span>Day 2</span>
+              <div class="absolute inset-0 bg-linear-to-r from-yellow-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+              <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                <img
+                  [src]="item.image"
+                  [alt]="item.activityName"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              </div>
+
+              <div class="flex flex-col justify-center grow min-w-0 relative z-10">
+                <h3
+                  class="font-bold text-white truncate transition-colors"
+                  [class.text-yellow-400]="isSelected(getOriginalIndex(item))">
+                  {{ item.activityName }}
+                </h3>
+                <div class="flex items-center gap-2 text-xs text-[#bab29c] mt-1">
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-location-dot text-[11px] text-yellow-400/70"></i>
+                    {{ item.city }}
+                  </span>
+                  <span class="w-1 h-1 rounded-full bg-[#3a3122]"></span>
+                  <span>{{ item.day }}</span>
+                </div>
               </div>
             </div>
-          </div>
+          </ng-container>
 
-          <!-- Item 3 -->
-          <div
-            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
-            <img
-              src="/Photo/Cairo.png"
-              alt="Khan El-Khalili Bazaar"
-              class="h-24 w-24 rounded-xl object-cover shrink-0" />
-
-            <div class="min-w-0">
-              <h3 class="truncate text-xl font-bold text-white">Khan El-Khalili Bazaar</h3>
-              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
-                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
-                <span>Cairo</span>
-                <span class="text-zinc-500">•</span>
-                <span>Day 3</span>
-              </div>
+          <ng-template #emptyState>
+            <div *ngIf="!isLoading" class="text-[#bab29c] text-center py-8">
+              No activities found.
             </div>
-          </div>
-
-          <!-- Item 4 -->
-          <div
-            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
-            <img
-            src="/Photo/Cairo.png"
-              alt="Hot Air Balloon Ride"
-              class="h-24 w-24 rounded-xl object-cover shrink-0" />
-
-            <div class="min-w-0">
-              <h3 class="truncate text-xl font-bold text-white">Hot Air Balloon Ride</h3>
-              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
-                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
-                <span>Luxor</span>
-                <span class="text-zinc-500">•</span>
-                <span>Day 4</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item 5 -->
-          <div
-            class="flex card-activity items-center gap-4 rounded-2xl border border-white/10 bg-[#211d16] p-4 transition hover:bg-[#2a241a]">
-            <img
-              src="/Photo/Cairo.png"
-              alt="Abu Simbel Tour"
-              class="h-24 w-24 rounded-xl object-cover shrink-0" />
-
-            <div class="min-w-0">
-              <h3 class="truncate text-xl font-bold text-white">Abu Simbel Tour</h3>
-              <div class="mt-2 flex items-center gap-2 text-base text-zinc-300">
-                <i class="fa-solid fa-location-dot text-sm text-zinc-400"></i>
-                <span>Aswan</span>
-                <span class="text-zinc-500">•</span>
-                <span>Day 5</span>
-              </div>
-            </div>
-          </div>
+          </ng-template>
 
         </div>
       </div>
+
     </div>
   </div>
 </div>
