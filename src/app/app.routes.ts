@@ -1,3 +1,4 @@
+import { DASHBOARD_ROUTES } from './features/admin/dashboard.routes';
 import { Routes } from '@angular/router';
 import { GustLayoutComponent } from './core/layouts/gust-layout/gust-layout.component';
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
@@ -13,6 +14,7 @@ import { TermsOfServiceComponent } from './features/terms-of-service/terms-of-se
 import { HelpCenterComponent } from './features/help-center/help-center.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { PrivacyComponent } from './features/privacy/privacy.component';
+import { DashboardComponent } from './features/admin/dashboard/dashboard.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -33,6 +35,8 @@ export const routes: Routes = [
      { path: 'help', component: HelpCenterComponent },
      { path: 'contact', component: ContactComponent },
      { path: 'privacy', component: PrivacyComponent },
+
+     { path: 'dashboard', component: DashboardComponent , children:DASHBOARD_ROUTES  },
 
     ],
   },
