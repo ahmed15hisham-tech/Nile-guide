@@ -107,10 +107,10 @@
 
   </div>
 </div>
-<!-- charts -->
+<!--line chart -->
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-12">
   <div class="overflow-x-auto">
-    <div class="min-w-[980px] rounded-[32px] border border-[#2c2418] bg-[#1b1712] p-7 lg:p-8">
+    <div class="min-w-[980px] overflow-hidden rounded-[32px] border border-[#2c2418] bg-[#1b1712] p-7 lg:p-8">
       
       <div class="mb-8 flex items-center gap-3">
         <i class="fa-solid fa-arrow-trend-up text-xl text-[#e0b100]"></i>
@@ -123,7 +123,7 @@
         <div class="relative h-[380px] w-full">
 
           <!-- y labels -->
-          <div class="absolute left-0 top-6 z-20 h-[270px] w-12 text-[13px] font-semibold text-[#c9bb9d]">
+          <div class="absolute left-0 top-6  h-[270px] w-12 text-[13px] font-semibold text-[#c9bb9d]">
   <span class="absolute -translate-y-1/2" style="top: 0%;">2,400</span>
   <span class="absolute -translate-y-1/2" style="top: 16.66%;">2,200</span>
   <span class="absolute -translate-y-1/2" style="top: 33.33%;">2,000</span>
@@ -137,7 +137,7 @@
           <div class="absolute left-16 right-0 top-0 h-[330px] overflow-hidden">
 
             <!-- legend -->
-            <div class="absolute left-1/2 top-1 z-20 flex -translate-x-1/2 items-center gap-2 text-[14px] font-medium text-[#bcae90]">
+            <div class="absolute left-1/2 top-1  flex -translate-x-1/2 items-center gap-2 text-[14px] font-medium text-[#bcae90]">
               <span class="h-[12px] w-[40px] rounded-[4px] border-[3px] border-[#e0b100]"></span>
               <span>Views</span>
             </div>
@@ -228,6 +228,256 @@
     </div>
   </div>
 </div>
+
+<!-- User Growth and Activities by Category -->
+
+<div class="grid grid-cols-1 gap-6 mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-12  lg:grid-cols-2 ">
+  <!-- User Growth -->
+<div class="rounded-2xl border border-[#3a3122] bg-[#221d16] p-4 sm:p-5 lg:h-[330px] lg:p-6">
+  <h3 class="mb-4 flex items-center gap-2 text-[18px] font-bold text-white sm:mb-6 sm:gap-3 sm:text-[20px]">
+    <i class="fa-solid fa-user-plus text-[#e0b100]"></i>
+    User Growth
+  </h3>
+
+  <div class="flex h-[210px] gap-2 sm:h-[230px] sm:gap-3">
+    <!-- Y axis -->
+    <div class="relative h-[170px] w-7 text-[10px] text-[#b8b1a4] sm:h-[190px] sm:w-9 sm:text-xs">
+      <span class="absolute left-0 top-0 -translate-y-1/2">200</span>
+      <span class="absolute left-0 top-1/4 -translate-y-1/2">150</span>
+      <span class="absolute left-0 top-2/4 -translate-y-1/2">100</span>
+      <span class="absolute left-0 top-3/4 -translate-y-1/2">50</span>
+      <span class="absolute bottom-0 left-0 translate-y-1/2">0</span>
+    </div>
+
+    <!-- Chart -->
+    <div class="relative h-[170px] flex-1 border-l border-b border-white/10 sm:h-[190px]">
+      <!-- Horizontal lines -->
+      <div class="pointer-events-none absolute inset-0">
+        <div class="absolute left-0 right-0 top-0 border-t border-white/10"></div>
+        <div class="absolute left-0 right-0 top-1/4 border-t border-white/10"></div>
+        <div class="absolute left-0 right-0 top-2/4 border-t border-white/10"></div>
+        <div class="absolute left-0 right-0 top-3/4 border-t border-white/10"></div>
+        <div class="absolute bottom-0 left-0 right-0 border-t border-white/10"></div>
+      </div>
+
+      <!-- Vertical lines -->
+      <div class="pointer-events-none absolute inset-0 grid grid-cols-6">
+        <div class="h-full border-r border-white/10"></div>
+        <div class="h-full border-r border-white/10"></div>
+        <div class="h-full border-r border-white/10"></div>
+        <div class="h-full border-r border-white/10"></div>
+        <div class="h-full border-r border-white/10"></div>
+        <div class="h-full"></div>
+      </div>
+
+      <!-- Bars -->
+      <div class="absolute inset-0 grid grid-cols-6 px-2 sm:px-4">
+        <div class="flex h-full items-end justify-center">
+          <div class="h-[22%] w-[60%] rounded-t-[2px] bg-[#e0b100] sm:w-[70%]"></div>
+        </div>
+
+        <div class="flex h-full items-end justify-center">
+          <div class="h-[39%] w-[60%] rounded-t-[2px] bg-[#e0b100] sm:w-[70%]"></div>
+        </div>
+
+        <div class="flex h-full items-end justify-center">
+          <div class="h-[46%] w-[60%] rounded-t-[2px] bg-[#e0b100] sm:w-[70%]"></div>
+        </div>
+
+        <div class="flex h-full items-end justify-center">
+          <div class="h-[67%] w-[60%] rounded-t-[2px] bg-[#e0b100] sm:w-[70%]"></div>
+        </div>
+
+        <div class="flex h-full items-end justify-center">
+          <div class="h-[83%] w-[60%] rounded-t-[2px] bg-[#e0b100] sm:w-[70%]"></div>
+        </div>
+
+        <div class="flex h-full items-end justify-center">
+          <div class="h-[99%] w-[60%] rounded-t-[2px] bg-[#e0b100] sm:w-[70%]"></div>
+        </div>
+      </div>
+
+      <!-- X labels -->
+      <div class="absolute left-0 right-0 -bottom-6 grid grid-cols-6 text-center text-[10px] text-[#b8b1a4] sm:-bottom-7 sm:text-sm">
+        <span>Jan</span>
+        <span>Feb</span>
+        <span>Mar</span>
+        <span>Apr</span>
+        <span>May</span>
+        <span>Jun</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Activities by Category -->
+  <div class="rounded-2xl border border-[#3a3122] bg-[#221d16] p-6 lg:h-[330px]">
+  <h3 class="mb-6 flex items-center gap-3 text-[20px] font-bold text-white">
+    <i class="fa-regular fa-circle-dot text-[#e0b100]"></i>
+    Activities by Category
+  </h3>
+
+  <div class="flex flex-col items-center justify-center gap-6">
+    <div class="category-chart relative h-40 w-40 rounded-full border-[3px] border-white">
+      <div class="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#221d16]"></div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-sm text-[#b8b1a4]">
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-8 border border-white/60 bg-[#e0b100]"></span>
+        <span>Historical</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-8 border border-white/60 bg-[#d4af37]"></span>
+        <span>Adventure</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-8 border border-white/60 bg-[#b97832]"></span>
+        <span>Cultural</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-8 border border-white/60 bg-[#8f6c17]"></span>
+        <span>Museum</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-8 border border-white/60 bg-[#6d570f]"></span>
+        <span>Diving</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- Top 5 Most Popular Activities -->
+
+<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-12">
+<div class="rounded-2xl border border-[#3a3122] bg-[#221d16] p-4 sm:p-5 lg:p-7">
+  <div class="mb-5 flex items-start gap-2 sm:mb-6 sm:items-center sm:gap-3">
+    <i class="fa-solid fa-chart-column mt-1 text-[18px] text-[#e0b100] sm:mt-0 sm:text-[20px]"></i>
+    <h3 class="text-[18px] font-bold leading-snug text-white sm:text-[20px] lg:text-[22px]">
+      Top 5 Most Popular Activities
+    </h3>
+  </div>
+
+  <div class="space-y-4 sm:space-y-5">
+    <!-- 1 -->
+    <div class="flex items-start gap-3 sm:gap-4">
+      <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5a4716] text-xs font-bold text-[#e0b100] sm:h-8 sm:w-8 sm:text-sm">
+        1
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <h4 class="max-w-[58%] text-[15px] font-bold leading-snug text-white sm:max-w-none sm:text-[18px]">
+            Sunrise Hot Air Balloon
+          </h4>
+          <span class="shrink-0 text-right text-[14px] font-bold leading-snug text-[#e0b100] sm:text-[16px]">
+            2,847 views
+          </span>
+        </div>
+
+        <div class="h-2 w-full overflow-hidden rounded-full bg-black/40">
+          <div class="h-full w-[95%] rounded-full bg-[#e0b100]"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="flex items-start gap-3 sm:gap-4">
+      <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5a4716] text-xs font-bold text-[#e0b100] sm:h-8 sm:w-8 sm:text-sm">
+        2
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <h4 class="max-w-[58%] text-[15px] font-bold leading-snug text-white sm:max-w-none sm:text-[18px]">
+            Private Pyramids Tour
+          </h4>
+          <span class="shrink-0 text-right text-[14px] font-bold leading-snug text-[#e0b100] sm:text-[16px]">
+            2,654 views
+          </span>
+        </div>
+
+        <div class="h-2 w-full overflow-hidden rounded-full bg-black/40">
+          <div class="h-full w-[88%] rounded-full bg-[#e0b100]"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="flex items-start gap-3 sm:gap-4">
+      <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5a4716] text-xs font-bold text-[#e0b100] sm:h-8 sm:w-8 sm:text-sm">
+        3
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <h4 class="max-w-[58%] text-[15px] font-bold leading-snug text-white sm:max-w-none sm:text-[18px]">
+            Nile River Cruise
+          </h4>
+          <span class="shrink-0 text-right text-[14px] font-bold leading-snug text-[#e0b100] sm:text-[16px]">
+            2,231 views
+          </span>
+        </div>
+
+        <div class="h-2 w-full overflow-hidden rounded-full bg-black/40">
+          <div class="h-full w-[74%] rounded-full bg-[#e0b100]"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="flex items-start gap-3 sm:gap-4">
+      <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5a4716] text-xs font-bold text-[#e0b100] sm:h-8 sm:w-8 sm:text-sm">
+        4
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <h4 class="max-w-[58%] text-[15px] font-bold leading-snug text-white sm:max-w-none sm:text-[18px]">
+            Red Sea Diving
+          </h4>
+          <span class="shrink-0 text-right text-[14px] font-bold leading-snug text-[#e0b100] sm:text-[16px]">
+            1,987 views
+          </span>
+        </div>
+
+        <div class="h-2 w-full overflow-hidden rounded-full bg-black/40">
+          <div class="h-full w-[66%] rounded-full bg-[#e0b100]"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="flex items-start gap-3 sm:gap-4">
+      <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#5a4716] text-xs font-bold text-[#e0b100] sm:h-8 sm:w-8 sm:text-sm">
+        5
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="mb-2 flex items-start justify-between gap-3">
+          <h4 class="max-w-[58%] text-[15px] font-bold leading-snug text-white sm:max-w-none sm:text-[18px]">
+            Karnak Temple Tour
+          </h4>
+          <span class="shrink-0 text-right text-[14px] font-bold leading-snug text-[#e0b100] sm:text-[16px]">
+            1,745 views
+          </span>
+        </div>
+
+        <div class="h-2 w-full overflow-hidden rounded-full bg-black/40">
+          <div class="h-full w-[58%] rounded-full bg-[#e0b100]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 
     </div>
 
