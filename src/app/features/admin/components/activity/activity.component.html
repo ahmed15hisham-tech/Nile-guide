@@ -34,7 +34,7 @@
     <div class="relative w-full lg:w-48">
       <select
         (change)="selectedStatus = $any($event.target).value"
-        class="w-full appearance-none cursor-pointer rounded-2xl border border-[#3a3122] bg-[#1b1712] px-4 py-4 pr-12 text-base text-white outline-none transition duration-300 focus:border-[#e0b100] focus:shadow-[0_0_20px_#e0b10022]"
+        class="w-full  appearance-none cursor-pointer rounded-2xl border border-[#3a3122] bg-[#1b1712] px-4 py-4 pr-12 text-base text-white outline-none transition duration-300 focus:border-[#e0b100] focus:shadow-[0_0_20px_#e0b10022]"
       >
         <option value="all">All Status</option>
         <option value="active">Active</option>
@@ -43,7 +43,165 @@
 
       <i class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a18f6a]"></i>
     </div>
+
+    <button
+  (click)="openAddActivityModal()"
+  class="cursor-pointer w-full lg:w-auto rounded-xl bg-[#e0b100] px-5 py-4 text-base font-semibold text-black transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_0_18px_#e0b10055]">
+  <i class="fa-solid fa-circle-plus mr-2"></i>
+  Add New Activity
+</button>
   </div>
+    <!-- Add New Activity -->
+
+    @if (isAddActivityModalOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+    <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-[#3a3122] bg-[#1b1712] shadow-[0_0_30px_#00000066]">
+
+      <div class="border-b border-[#3a3122] px-6 py-5">
+        <h2 class="text-2xl font-bold text-white">Add New Activity</h2>
+      </div>
+
+      <form [formGroup]="activityForm" (ngSubmit)="addActivity()" class="space-y-6 px-6 py-6">
+
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-white">Activity Name</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="e.g., Sunrise Hot Air Balloon"
+            class="w-full rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 text-white outline-none placeholder:text-[#a18f6a] focus:border-[#e0b100]" />
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-white">Description</label>
+          <textarea
+            rows="4"
+            formControlName="description"
+            placeholder="Brief description of the activity..."
+            class="w-full rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 text-white outline-none placeholder:text-[#a18f6a] focus:border-[#e0b100]"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-white">Category</label>
+            <div class="relative">
+              <select
+                formControlName="category"
+                class="w-full appearance-none rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 pr-12 text-white outline-none focus:border-[#e0b100]">
+                <option value="">Select category</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Historical">Historical</option>
+                <option value="Cruise">Cruise</option>
+                <option value="Museum">Museum</option>
+                <option value="Diving">Diving</option>
+              </select>
+              <i class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a18f6a]"></i>
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-white">Price (USD)</label>
+            <input
+              type="number"
+              formControlName="price"
+              placeholder="120"
+              class="w-full rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 text-white outline-none placeholder:text-[#a18f6a] focus:border-[#e0b100]" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-white">Location</label>
+            <div class="relative">
+              <select
+                formControlName="location"
+                class="w-full appearance-none rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 pr-12 text-white outline-none focus:border-[#e0b100]">
+                <option value="">Select location</option>
+                <option value="Cairo">Cairo</option>
+                <option value="Giza">Giza</option>
+                <option value="Luxor">Luxor</option>
+                <option value="Aswan">Aswan</option>
+                <option value="Sharm El-Sheikh">Sharm El-Sheikh</option>
+              </select>
+              <i class="fa-solid fa-chevron-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#a18f6a]"></i>
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-white">Duration</label>
+            <input
+              type="text"
+              formControlName="duration"
+              placeholder="3-4 Hours"
+              class="w-full rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 text-white outline-none placeholder:text-[#a18f6a] focus:border-[#e0b100]" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-white">Rating (1-5)</label>
+            <input
+              type="number"
+              step="0.1"
+              formControlName="rating"
+              placeholder="4.9"
+              class="w-full rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 text-white outline-none placeholder:text-[#a18f6a] focus:border-[#e0b100]" />
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-white">Max Group Size</label>
+            <input
+              type="number"
+              formControlName="maxGroupSize"
+              placeholder="16"
+              class="w-full rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 text-white outline-none placeholder:text-[#a18f6a] focus:border-[#e0b100]" />
+          </div>
+        </div>
+
+        <div>
+          <label class="mb-3 block text-sm font-semibold text-white">Status</label>
+          <div class="flex items-center gap-6">
+            <label class="flex items-center gap-2 text-white">
+              <input type="radio" formControlName="status" value="Active" class="accent-[#e0b100]" />
+              <span>Active</span>
+            </label>
+
+            <label class="flex items-center gap-2 text-white">
+              <input type="radio" formControlName="status" value="Inactive" class="accent-[#e0b100]" />
+              <span>Inactive</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-white">Image URL</label>
+          <input
+            type="text"
+            formControlName="imageUrl"
+            placeholder="https://example.com/image.jpg"
+            class="w-full rounded-xl border border-[#3a3122] bg-[#14110d] px-4 py-3 text-white outline-none placeholder:text-[#a18f6a] focus:border-[#e0b100]" />
+        </div>
+
+        <div class="flex items-center justify-end gap-3">
+          <button
+            type="button"
+            (click)="closeAddActivityModal()"
+            class="w-fit cursor-pointer rounded-xl border border-[#3a3122] bg-[#1b1712] px-6 py-3 text-white  transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_0_18px_#e0b10055] hover:border-[#e0b100]">
+            Cancel
+          </button>
+
+           <button
+  class="flex-1 cursor-pointer w-full lg:w-auto rounded-xl bg-[#e0b100] px-5 py-4 text-base font-semibold text-black transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_0_18px_#e0b10055]">
+  <i class="fa-solid fa-user-plus mr-2"></i>
+Add Activity
+</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}
+
 
    <!-- Activities List -->
   <div class="mt-6 overflow-hidden rounded-3xl border border-[#2c2418] bg-[#16120d]">

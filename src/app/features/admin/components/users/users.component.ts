@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 interface IUser {
   id: number;
@@ -14,18 +15,34 @@ interface IUser {
 
 @Component({
   selector: 'app-users',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
 })
 export class UsersComponent {
 
- userSearch = '';
+  userSearch = '';
   selectedRole = 'all';
   selectedStatus = 'all';
 
   currentPage = 1;
   itemsPerPage = 3;
+
+  isAddUserModalOpen = false;
+
+  userForm: any;
+
+  constructor(private fb: FormBuilder) {
+    this.userForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', Validators.required],
+      role: ['User', Validators.required],
+      joined: [''],
+      wishlist: [0],
+      status: ['Active' as 'Active' | 'Inactive'],
+      image: [''],
+    });
+  }
 
   users: IUser[] = [
     {
@@ -155,6 +172,51 @@ export class UsersComponent {
   // last user number in the current page
   get endItem(): number {
     return Math.min(this.currentPage * this.itemsPerPage, this.users.length);
+  }
+
+  // open add user modal
+  openAddUserModal(): void {
+    this.isAddUserModalOpen = true;
+  }
+
+  // close add user modal
+  closeAddUserModal(): void {
+    this.isAddUserModalOpen = false;
+
+    this.userForm.reset({
+      name: '',
+      email: '',
+      role: 'User',
+      joined: '',
+      wishlist: 0,
+      status: 'Active',
+      image: '',
+    });
+  }
+
+  // add new user from form
+  addUser(): void {
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.userForm.getRawValue();
+
+    const newUser: IUser = {
+      id: this.users.length + 1,
+      name: formValue.name ?? '',
+      email: formValue.email ?? '',
+      role: formValue.role ?? 'User',
+      joined: formValue.joined ?? '',
+      wishlist: formValue.wishlist ?? 0,
+      status: formValue.status ?? 'Active',
+      image: formValue.image ?? 'https://i.pravatar.cc/100?img=30',
+    };
+
+    this.users.unshift(newUser);
+    this.currentPage = 1;
+    this.closeAddUserModal();
   }
 
 }
