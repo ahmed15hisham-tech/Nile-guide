@@ -1,12 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { Datepicker } from 'flowbite-datepicker';
+
 import { ActivitiesService } from './activities.service';
 import { WishlistService } from '../wishlist/wishlist.service';
 import { ScheduleService } from '../schedule/schedule.service';
+import { ProfileService } from '../profile/profile.service';
+import { UserProfileResponse } from '../profile/profile';
 
 import {
   ActivityCategory,
@@ -14,7 +28,7 @@ import {
   ActivityDetails,
   ActivityListItem,
   ActivityOpeningHour,
-  ActivityProvider, 
+  ActivityProvider,
   ActivitySortBy,
 } from './activities.interfaces';
 
@@ -25,13 +39,18 @@ import {
   templateUrl: './activities.component.html',
   styleUrl: './activities.component.css',
 })
-export class ActivitiesComponent implements OnInit {
+export class ActivitiesComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('planDateInput')
+  planDateInput?: ElementRef<HTMLInputElement>;
+
   private readonly activitiesService = inject(ActivitiesService);
   private readonly wishlistService = inject(WishlistService);
   private readonly scheduleService = inject(ScheduleService);
+  private readonly profileService = inject(ProfileService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly toastr = inject(ToastrService);
   private readonly route = inject(ActivatedRoute);
+  private readonly platformId = inject(PLATFORM_ID);
 
   activities: ActivityListItem[] = [];
   categories: ActivityCategory[] = [];
@@ -63,11 +82,27 @@ export class ActivitiesComponent implements OnInit {
   isSubmittingPlan = false;
   planValidationError = '';
 
+  private userProfile: UserProfileResponse | null = null;
+
+  private planDatePicker: any;
+  private planDateEventsBound = false;
+
+  private readonly syncPlanDateHandler = () => this.syncPlanDateValue();
+
   ngOnInit(): void {
     this.getCategories();
     this.getCities();
     this.loadWishlistIds();
+    this.loadUserProfile();
     this.listenToProfileFilters();
+  }
+
+  ngAfterViewInit(): void {
+    this.initPlanDatePickerAfterRender();
+  }
+
+  ngOnDestroy(): void {
+    this.destroyPlanDatePicker();
   }
 
   private listenToProfileFilters(): void {
@@ -76,6 +111,20 @@ export class ActivitiesComponent implements OnInit {
       this.selectedCategoryIds = this.parseIds(params.get('categories'));
       this.currentPage = 1;
       this.getActivities();
+    });
+  }
+
+  private loadUserProfile(): void {
+    this.profileService.getProfile().subscribe({
+      next: (profile) => {
+        this.userProfile = profile;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Failed to load user profile for travel dates validation', error);
+        this.userProfile = null;
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -261,6 +310,7 @@ export class ActivitiesComponent implements OnInit {
         this.selectedActivityDetails = response;
         this.isPlanModalLoading = false;
         this.cdr.detectChanges();
+        this.initPlanDatePickerAfterRender();
       },
       error: () => {
         this.isPlanModalLoading = false;
@@ -272,6 +322,8 @@ export class ActivitiesComponent implements OnInit {
   }
 
   closePlanModal(): void {
+    this.destroyPlanDatePicker();
+
     this.isPlanModalOpen = false;
     this.isPlanModalLoading = false;
     this.selectedActivityDetails = null;
@@ -283,11 +335,39 @@ export class ActivitiesComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  openPlanDatePicker(): void {
+    this.initPlanDatePickerAfterRender();
+
+    setTimeout(() => {
+      this.planDateInput?.nativeElement.focus();
+      this.planDatePicker?.show?.();
+      this.stylePlanDatePicker();
+    }, 0);
+  }
+
+  blockPlanDateTyping(event: KeyboardEvent): void {
+    const allowedKeys = [
+      'Tab',
+      'Shift',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Escape',
+    ];
+
+    if (!allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   onPlanDateChange(): void {
     this.planValidationError = '';
 
     if (this.planDate && !this.isValidDateFormat(this.planDate)) {
       this.planValidationError = 'Date must be in YYYY-MM-DD format.';
+    } else if (this.planDate && this.isPlanDateOutsideTravelDates()) {
+      this.planValidationError = this.getTravelDatesValidationMessage();
     }
 
     this.cdr.detectChanges();
@@ -359,6 +439,12 @@ export class ActivitiesComponent implements OnInit {
 
     if (!this.isValidDateFormat(this.planDate)) {
       this.planValidationError = 'Date must be in YYYY-MM-DD format.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    if (this.isPlanDateOutsideTravelDates()) {
+      this.planValidationError = this.getTravelDatesValidationMessage();
       this.cdr.detectChanges();
       return;
     }
@@ -553,8 +639,158 @@ export class ActivitiesComponent implements OnInit {
     return rating.toFixed(1);
   }
 
+  private initPlanDatePickerAfterRender(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    setTimeout(() => {
+      const input = this.planDateInput?.nativeElement;
+
+      if (!input) {
+        return;
+      }
+
+      if (!this.planDatePicker) {
+        this.planDatePicker = new Datepicker(input, {
+          format: 'yyyy-mm-dd',
+          autohide: true,
+          todayBtn: false,
+          clearBtn: true,
+        });
+      }
+
+      if (!this.planDateEventsBound) {
+        input.addEventListener('changeDate', this.syncPlanDateHandler);
+        input.addEventListener('change', this.syncPlanDateHandler);
+        this.planDateEventsBound = true;
+      }
+
+      this.stylePlanDatePicker();
+    }, 0);
+  }
+
+  private syncPlanDateValue(): void {
+    const value = this.planDateInput?.nativeElement.value ?? '';
+
+    this.planDate = value;
+    this.onPlanDateChange();
+    this.cdr.detectChanges();
+  }
+
+  private stylePlanDatePicker(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    setTimeout(() => {
+      const datepickers = document.querySelectorAll(
+        '.datepicker, .datepicker-dropdown'
+      );
+
+      datepickers.forEach((datepicker) => {
+        const buttons = datepicker.querySelectorAll('button');
+
+        buttons.forEach((button) => {
+          const btn = button as HTMLButtonElement;
+
+          if (btn.textContent?.trim().toLowerCase() === 'clear') {
+            btn.className = '';
+
+            btn.style.display = 'block';
+            btn.style.width = 'fit-content';
+            btn.style.minWidth = '170px';
+            btn.style.margin = '10px auto 0';
+            btn.style.padding = '12px 34px';         
+            btn.style.border = '1px solid rgba(255,255,255,0.75)';
+            btn.style.borderRadius = '9999px';
+            btn.style.fontWeight = '600';
+            btn.style.fontSize = '14px';
+            btn.style.lineHeight = '1';
+            btn.style.cursor = 'pointer';
+            btn.style.transition =
+              'background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease';
+            btn.style.boxShadow = 'none';
+
+                  btn.style.backgroundColor = '#eab308';
+          btn.style.color = '#000';
+
+          btn.onmouseenter = () => {
+            btn.style.backgroundColor = '#ca8a04';
+          };
+
+          btn.onmouseleave = () => {
+            btn.style.backgroundColor = '#eab308';
+          };
+          }
+        });
+      });
+    }, 50);
+  }
+
+  private destroyPlanDatePicker(): void {
+    const input = this.planDateInput?.nativeElement;
+
+    if (input && this.planDateEventsBound) {
+      input.removeEventListener('changeDate', this.syncPlanDateHandler);
+      input.removeEventListener('change', this.syncPlanDateHandler);
+    }
+
+    this.planDateEventsBound = false;
+
+    try {
+      this.planDatePicker?.destroy?.();
+    } catch {
+      // ignore
+    }
+
+    this.planDatePicker = null;
+  }
+
   private isValidDateFormat(value: string): boolean {
     return /^\d{4}-\d{2}-\d{2}$/.test(value);
+  }
+
+  private isPlanDateOutsideTravelDates(): boolean {
+    if (!this.userProfile?.hasTravelDates) return false;
+
+    const travelStartDate = this.toDateOnly(this.userProfile.travelStartDate);
+    const travelEndDate = this.toDateOnly(this.userProfile.travelEndDate);
+
+    if (!travelStartDate || !travelEndDate) return false;
+
+    return this.planDate < travelStartDate || this.planDate > travelEndDate;
+  }
+
+  private getTravelDatesValidationMessage(): string {
+    const travelStartDate = this.toDateOnly(this.userProfile?.travelStartDate);
+    const travelEndDate = this.toDateOnly(this.userProfile?.travelEndDate);
+
+    if (!travelStartDate || !travelEndDate) {
+      return 'This activity is outside your selected trip dates.';
+    }
+
+    return `This activity is outside your selected trip dates. Your trip is from ${this.formatDateLabel(travelStartDate)} to ${this.formatDateLabel(travelEndDate)}.`;
+  }
+
+  private toDateOnly(value: string | null | undefined): string {
+    if (!value) return '';
+
+    return String(value).split('T')[0];
+  }
+
+  private formatDateLabel(value: string): string {
+    const [year, month, day] = value.split('-').map(Number);
+
+    if (!year || !month || !day) {
+      return value;
+    }
+
+    return new Date(year, month - 1, day).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
   }
 
   private isValidTwelveHourTimeFormat(value: string): boolean {

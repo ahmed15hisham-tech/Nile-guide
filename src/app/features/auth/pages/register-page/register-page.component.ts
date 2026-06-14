@@ -23,8 +23,6 @@ import { AuthService } from '../../services/auth.service';
 import { NATIONALITIES } from '../../../../core/constants/nationalities';
 import { STORED_KEYS } from '../../../../core/constants/Stored_keys';
 
-// لو السطر ده عمل import error عندك، استخدم بداله:
-// import Datepicker from 'flowbite-datepicker/Datepicker';
 import { Datepicker } from 'flowbite-datepicker';
 
 function passwordsMatch(group: AbstractControl) {
