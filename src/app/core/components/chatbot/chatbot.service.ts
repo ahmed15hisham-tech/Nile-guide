@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { STORED_KEYS } from '../../constants/Stored_keys';
 
 export interface CreateAiConversationResponse {
@@ -44,6 +44,27 @@ export interface SavedConversationResponse {
   conversationId?: string;
   conversation_id?: string;
   id?: string;
+  title?: string;
+  updatedAt?: string;
+  updated_at?: string;
+}
+
+export interface SavedConversationItem {
+  conversationId: string;
+  title?: string;
+  updatedAt?: string;
+}
+
+export interface AiConversationMetadata {
+  conversation_id: string;
+  title?: string;
+  updated_at?: string;
+}
+
+export interface AiConversationsListResponse {
+  conversations?: any[];
+  items?: any[];
+  data?: any[];
 }
 
 @Injectable({
@@ -80,16 +101,67 @@ export class ChatbotService {
     );
   }
 
+  getAiConversationsByIds(
+    conversationIds: string[]
+  ): Observable<AiConversationMetadata[]> {
+    const ids = conversationIds
+      .map((id) => id.trim())
+      .filter((id) => id.length > 0);
+
+    if (!ids.length) {
+      return of([]);
+    }
+
+    const params = new HttpParams().set('ids', ids.join(','));
+
+    return this.http
+      .get<AiConversationsListResponse>(`${this.aiBaseUrl}/conversations/`, {
+        params,
+      })
+      .pipe(
+        map((response) => {
+          const list =
+            response?.conversations ??
+            response?.items ??
+            response?.data ??
+            [];
+
+          if (!Array.isArray(list)) {
+            return [];
+          }
+
+          return list
+            .map((item: any) => ({
+              conversation_id: String(
+                item?.conversation_id ??
+                  item?.conversationId ??
+                  item?.id ??
+                  ''
+              ).trim(),
+              title: String(item?.title ?? '').trim(),
+              updated_at: String(
+                item?.updated_at ??
+                  item?.updatedAt ??
+                  item?.modified_at ??
+                  item?.modifiedAt ??
+                  ''
+              ).trim(),
+            }))
+            .filter((item) => item.conversation_id.length > 0);
+        })
+      );
+  }
+
   saveConversationForUser(conversationId: string): Observable<void> {
     return this.http.post<void>(this.backendChatUrl, {
       conversationId,
     });
   }
 
-  getSavedConversations(): Observable<string[]> {
-    return this.http.get<unknown>(this.backendChatUrl).pipe(
-      map((response) => this.normalizeConversationIds(response))
-    );
+  getSavedConversations(): Observable<SavedConversationItem[]> {
+    return this.http
+      .get<unknown>(this.backendChatUrl)
+      .pipe(map((response) => this.normalizeSavedConversations(response)));
   }
 
   deleteConversation(conversationId: string): Observable<void> {
@@ -98,11 +170,11 @@ export class ChatbotService {
     );
   }
 
-  private normalizeConversationIds(response: unknown): string[] {
+  private normalizeSavedConversations(response: unknown): SavedConversationItem[] {
     if (Array.isArray(response)) {
       return response
-        .map((item) => this.extractConversationId(item))
-        .filter((id): id is string => !!id);
+        .map((item) => this.extractSavedConversation(item))
+        .filter((item): item is SavedConversationItem => !!item);
     }
 
     const anyResponse = response as any;
@@ -119,22 +191,38 @@ export class ChatbotService {
     }
 
     return list
-      .map((item) => this.extractConversationId(item))
-      .filter((id): id is string => !!id);
+      .map((item) => this.extractSavedConversation(item))
+      .filter((item): item is SavedConversationItem => !!item);
   }
 
-  private extractConversationId(item: unknown): string | null {
+  private extractSavedConversation(item: unknown): SavedConversationItem | null {
     if (typeof item === 'string') {
-      return item;
+      const id = item.trim();
+
+      if (!id) return null;
+
+      return {
+        conversationId: id,
+      };
     }
 
     const value = item as SavedConversationResponse;
 
-    return (
+    const conversationId = String(
       value?.conversationId ||
-      value?.conversation_id ||
-      value?.id ||
-      null
-    );
+        value?.conversation_id ||
+        value?.id ||
+        ''
+    ).trim();
+
+    if (!conversationId) {
+      return null;
+    }
+
+    return {
+      conversationId,
+      title: value?.title ? String(value.title).trim() : '',
+      updatedAt: String(value?.updatedAt || value?.updated_at || '').trim(),
+    };
   }
 }

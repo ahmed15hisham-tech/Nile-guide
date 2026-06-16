@@ -5,8 +5,10 @@ import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import {
+  AiConversationMetadata,
   ChatbotService,
   RetrievedConversationResponse,
+  SavedConversationItem,
 } from './chatbot.service';
 
 interface ChatMessage {
@@ -124,7 +126,7 @@ export class ChatbotComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.messages = this.mapRetrievedHistoryToMessages(response);
-          this.updateConversationTitle(response);
+          this.updateConversationTitleFromRetrievedHistory(response);
           this.cdr.detectChanges();
         },
         error: (error) => {
@@ -135,10 +137,7 @@ export class ChatbotComponent implements OnInit {
       });
   }
 
-  deleteConversation(
-    event: MouseEvent,
-    conversationId: string
-  ): void {
+  deleteConversation(event: MouseEvent, conversationId: string): void {
     event.stopPropagation();
 
     if (!conversationId) return;
@@ -185,10 +184,6 @@ export class ChatbotComponent implements OnInit {
           error: (error) => {
             console.error('Save conversation error:', error);
 
-            /*
-              حتى لو حفظ الـ conversationId في الباك فشل،
-              نخلي الشات يكمل عادي بدل ما نوقف تجربة المستخدم.
-            */
             this.addConversationToList(conversationId, text);
             this.sendMessageToConversation(text, conversationId);
           },
@@ -226,6 +221,7 @@ export class ChatbotComponent implements OnInit {
           }
 
           this.updateLocalConversationTitle(conversationId, text);
+          this.refreshConversationMetadata();
           this.cdr.detectChanges();
         },
         error: (error) => {
@@ -251,13 +247,21 @@ export class ChatbotComponent implements OnInit {
         })
       )
       .subscribe({
-        next: (ids) => {
-          this.savedConversations = ids.map((conversationId, index) => ({
-            conversationId,
-            title: `Conversation ${index + 1}`,
+        next: (items) => {
+          const uniqueItems = this.getUniqueSavedConversations(items);
+
+          this.savedConversations = uniqueItems.map((item, index) => ({
+            conversationId: item.conversationId,
+            title:
+              item.title?.trim() ||
+              `Conversation ${index + 1}`,
+            updatedAt: item.updatedAt,
           }));
 
-          this.loadConversationTitles();
+          this.loadConversationMetadata(
+            uniqueItems.map((item) => item.conversationId)
+          );
+
           this.cdr.detectChanges();
         },
         error: (error) => {
@@ -268,10 +272,88 @@ export class ChatbotComponent implements OnInit {
       });
   }
 
-  private loadConversationTitles(): void {
-    if (!this.savedConversations.length) return;
+  private getUniqueSavedConversations(
+    items: SavedConversationItem[]
+  ): SavedConversationItem[] {
+    const map = new Map<string, SavedConversationItem>();
 
-    const requests = this.savedConversations.map((item) =>
+    items.forEach((item) => {
+      if (!item.conversationId) return;
+
+      if (!map.has(item.conversationId)) {
+        map.set(item.conversationId, item);
+      }
+    });
+
+    return Array.from(map.values());
+  }
+
+  private loadConversationMetadata(conversationIds: string[]): void {
+    const ids = Array.from(
+      new Set(
+        conversationIds
+          .map((id) => id.trim())
+          .filter((id) => id.length > 0)
+      )
+    );
+
+    if (!ids.length) return;
+
+    this.chatbotService.getAiConversationsByIds(ids).subscribe({
+      next: (metadataList) => {
+        this.applyConversationMetadata(metadataList);
+        this.fillMissingTitlesFromHistory();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Load conversation metadata error:', error);
+        this.fillMissingTitlesFromHistory();
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  private refreshConversationMetadata(): void {
+    const ids = this.savedConversations.map((item) => item.conversationId);
+    this.loadConversationMetadata(ids);
+  }
+
+  private applyConversationMetadata(
+    metadataList: AiConversationMetadata[]
+  ): void {
+    const metadataMap = new Map(
+      metadataList.map((item) => [item.conversation_id.trim(), item])
+    );
+
+    this.savedConversations = this.savedConversations
+      .map((item, index) => {
+        const metadata = metadataMap.get(item.conversationId.trim());
+        const metadataTitle = metadata?.title?.trim();
+
+        return {
+          ...item,
+          title: metadataTitle
+            ? this.truncateTitle(metadataTitle)
+            : item.title || `Conversation ${index + 1}`,
+          updatedAt: metadata?.updated_at || item.updatedAt,
+        };
+      })
+      .sort((a, b) => {
+        const firstDate = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+        const secondDate = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+
+        return secondDate - firstDate;
+      });
+  }
+
+  private fillMissingTitlesFromHistory(): void {
+    const missingTitleItems = this.savedConversations.filter((item) =>
+      item.title.startsWith('Conversation ')
+    );
+
+    if (!missingTitleItems.length) return;
+
+    const requests = missingTitleItems.map((item) =>
       this.chatbotService.retrieveConversation(item.conversationId).pipe(
         catchError(() => of(null))
       )
@@ -279,17 +361,22 @@ export class ChatbotComponent implements OnInit {
 
     forkJoin(requests).subscribe({
       next: (responses) => {
-        this.savedConversations = this.savedConversations.map((item, index) => {
-          const response = responses[index];
+        responses.forEach((response, index) => {
+          if (!response) return;
 
-          if (!response) {
-            return item;
-          }
+          const conversationId = missingTitleItems[index].conversationId;
+          const itemIndex = this.savedConversations.findIndex(
+            (item) => item.conversationId === conversationId
+          );
 
-          return {
-            ...item,
-            title: this.getConversationTitle(response, index),
-            updatedAt: response.updated_at,
+          if (itemIndex === -1) return;
+
+          this.savedConversations[itemIndex] = {
+            ...this.savedConversations[itemIndex],
+            title: this.getConversationTitleFromHistory(response, itemIndex),
+            updatedAt:
+              response.updated_at ||
+              this.savedConversations[itemIndex].updatedAt,
           };
         });
 
@@ -318,7 +405,29 @@ export class ChatbotComponent implements OnInit {
       .filter((message) => !!message.text?.trim());
   }
 
-  private getConversationTitle(
+  private updateConversationTitleFromRetrievedHistory(
+    response: RetrievedConversationResponse
+  ): void {
+    const index = this.savedConversations.findIndex(
+      (item) => item.conversationId === response.conversation_id
+    );
+
+    if (index === -1) return;
+
+    const current = this.savedConversations[index];
+
+    if (current.title && !current.title.startsWith('Conversation ')) {
+      return;
+    }
+
+    this.savedConversations[index] = {
+      ...current,
+      title: this.getConversationTitleFromHistory(response, index),
+      updatedAt: response.updated_at,
+    };
+  }
+
+  private getConversationTitleFromHistory(
     response: RetrievedConversationResponse,
     index: number
   ): string {
@@ -331,20 +440,6 @@ export class ChatbotComponent implements OnInit {
     }
 
     return this.truncateTitle(firstUserMessage.content);
-  }
-
-  private updateConversationTitle(response: RetrievedConversationResponse): void {
-    const index = this.savedConversations.findIndex(
-      (item) => item.conversationId === response.conversation_id
-    );
-
-    if (index === -1) return;
-
-    this.savedConversations[index] = {
-      ...this.savedConversations[index],
-      title: this.getConversationTitle(response, index),
-      updatedAt: response.updated_at,
-    };
   }
 
   private updateLocalConversationTitle(
