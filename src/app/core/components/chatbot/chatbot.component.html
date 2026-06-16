@@ -24,15 +24,99 @@
           </div>
         </div>
 
-        <button
-          type="button"
-          (click)="closeChat()"
-          class="cursor-pointer text-white/70 transition hover:text-yellow-400"
-          aria-label="Close chat"
-        >
-          <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            (click)="startNewChat()"
+            class="cursor-pointer text-white/70 transition hover:text-yellow-400"
+            aria-label="New chat"
+            title="New chat"
+          >
+            <i class="fa-regular fa-pen-to-square text-lg"></i>
+          </button>
+
+          <button
+            type="button"
+            (click)="toggleHistory()"
+            class="cursor-pointer text-white/70 transition hover:text-yellow-400"
+            aria-label="Chat history"
+            title="Chat history"
+          >
+            <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+          </button>
+
+          <button
+            type="button"
+            (click)="closeChat()"
+            class="cursor-pointer text-white/70 transition hover:text-yellow-400"
+            aria-label="Close chat"
+          >
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
       </div>
+
+      @if (isHistoryOpen) {
+        <div class="border-b border-white/10 bg-black/20 px-5 py-4">
+          <div class="mb-3 flex items-center justify-between">
+            <h4 class="text-sm font-bold text-white">Chat History</h4>
+
+            @if (isLoadingConversations) {
+              <span class="text-xs text-yellow-400">
+                <i class="fa-solid fa-spinner fa-spin mr-1"></i>
+                Loading
+              </span>
+            }
+          </div>
+
+          <div
+            class="max-h-44 space-y-2 overflow-y-auto overflow-x-hidden pr-1
+                   [scrollbar-width:thin]
+                   [scrollbar-color:#eab308_#1b1915]
+                   [&::-webkit-scrollbar]:w-2
+                   [&::-webkit-scrollbar-track]:bg-[#1b1915]
+                   [&::-webkit-scrollbar-thumb]:rounded-full
+                   [&::-webkit-scrollbar-thumb]:bg-yellow-500
+                   [&::-webkit-scrollbar-thumb:hover]:bg-yellow-400"
+          >
+            @if (savedConversations.length === 0 && !isLoadingConversations) {
+              <div class="rounded-xl border border-white/10 bg-[#27241b] px-4 py-3 text-sm text-white/60">
+                No saved conversations yet.
+              </div>
+            }
+
+            @for (conversation of savedConversations; track conversation.conversationId) {
+              <button
+                type="button"
+                (click)="openConversation(conversation.conversationId)"
+                class="flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#27241b] px-4 py-3 text-left transition hover:border-yellow-500/40 hover:bg-[#312d22]"
+                [class.border-yellow-500]="conversation.conversationId === currentConversationId"
+              >
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-sm font-semibold text-white/90">
+                    {{ conversation.title }}
+                  </span>
+
+                  @if (conversation.updatedAt) {
+                    <span class="mt-1 block truncate text-xs text-white/40">
+                      {{ conversation.updatedAt }}
+                    </span>
+                  }
+                </span>
+
+                <span
+                  type="button"
+                  (click)="deleteConversation($event, conversation.conversationId)"
+                  class="shrink-0 text-white/45 transition hover:text-red-400"
+                  title="Delete conversation"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </span>
+              </button>
+            }
+          </div>
+        </div>
+      }
 
       <div
         class="flex-1 overflow-y-auto overflow-x-hidden px-5 py-5
@@ -44,7 +128,14 @@
                [&::-webkit-scrollbar-thumb]:bg-yellow-500
                [&::-webkit-scrollbar-thumb:hover]:bg-yellow-400"
       >
-        @if (messages.length === 0) {
+        @if (isLoadingConversation) {
+          <div class="flex h-full items-center justify-center text-center text-sm text-white/60">
+            <div>
+              <i class="fa-solid fa-spinner fa-spin mb-3 block text-2xl text-yellow-400"></i>
+              Loading conversation...
+            </div>
+          </div>
+        } @else if (messages.length === 0) {
           <div class="flex h-full items-center justify-center text-center">
             <div class="max-w-xs">
               <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-400">
@@ -102,14 +193,14 @@
             type="text"
             name="messageText"
             [(ngModel)]="messageText"
-            [disabled]="isSending"
+            [disabled]="isSending || isLoadingConversation"
             placeholder="Ask about Egypt..."
             class="min-w-0 flex-1 rounded-xl border border-yellow-500/40 bg-transparent px-4 py-3 text-sm text-white outline-none placeholder:text-white/45 focus:border-yellow-400 disabled:cursor-not-allowed disabled:opacity-60"
           />
 
           <button
             type="submit"
-            [disabled]="isSending || !messageText.trim()"
+            [disabled]="isSending || isLoadingConversation || !messageText.trim()"
             class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl bg-yellow-500 text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Send message"
           >
