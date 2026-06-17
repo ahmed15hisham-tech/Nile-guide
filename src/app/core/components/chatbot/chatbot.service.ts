@@ -14,10 +14,28 @@ export interface ChatRequest {
 }
 
 export interface ChatSource {
+  activity_id?: number;
+  activityId?: number;
+  activityID?: number;
+
+  activity_url?: string;
+  activityUrl?: string;
+  activityURL?: string;
+  url?: string;
+
+  activity_name?: string;
+  activityName?: string;
+  activityNameEn?: string;
+  title?: string;
+  name?: string;
+
   document_name?: string;
   file_name?: string;
+  city?: string;
+  doc_type?: string;
   page?: number;
   text?: string;
+  excerpt?: string;
   score?: number;
 }
 

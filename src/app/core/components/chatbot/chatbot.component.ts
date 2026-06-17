@@ -1,19 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import {
   AiConversationMetadata,
   ChatbotService,
+  ChatSource,
   RetrievedConversationResponse,
   SavedConversationItem,
 } from './chatbot.service';
 
+interface ActivitySourceLink {
+  activityId: number;
+  title: string;
+}
+
 interface ChatMessage {
   sender: 'bot' | 'user';
   text: string;
+  sources?: ActivitySourceLink[];
 }
 
 interface ConversationItem {
@@ -26,7 +34,7 @@ interface ConversationItem {
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './chatbot.component.html',
 })
 export class ChatbotComponent implements OnInit {
@@ -217,6 +225,7 @@ export class ChatbotComponent implements OnInit {
             this.messages.push({
               sender: 'bot',
               text: response.answer.trim(),
+              sources: this.normalizeActivitySources(response.sources ?? []),
             });
           }
 
@@ -252,9 +261,7 @@ export class ChatbotComponent implements OnInit {
 
           this.savedConversations = uniqueItems.map((item, index) => ({
             conversationId: item.conversationId,
-            title:
-              item.title?.trim() ||
-              `Conversation ${index + 1}`,
+            title: item.title?.trim() || `Conversation ${index + 1}`,
             updatedAt: item.updatedAt,
           }));
 
@@ -482,6 +489,105 @@ export class ChatbotComponent implements OnInit {
       },
       ...this.savedConversations,
     ];
+  }
+
+  private normalizeActivitySources(sources: ChatSource[]): ActivitySourceLink[] {
+    const uniqueSources = new Map<number, ActivitySourceLink>();
+
+    sources.forEach((source) => {
+      const activityId = this.extractActivityId(source);
+
+      if (!activityId || activityId <= 0) {
+        return;
+      }
+
+      if (!uniqueSources.has(activityId)) {
+        uniqueSources.set(activityId, {
+          activityId,
+          title: this.extractActivityTitle(source, activityId),
+        });
+      }
+    });
+
+    return Array.from(uniqueSources.values());
+  }
+
+  private extractActivityId(source: ChatSource): number | null {
+    const anySource = source as any;
+
+    const directId =
+      anySource?.activity_id ??
+      anySource?.activityId ??
+      anySource?.activityID ??
+      null;
+
+    if (directId !== null && directId !== undefined) {
+      const parsedId = Number(directId);
+
+      if (!Number.isNaN(parsedId) && parsedId > 0) {
+        return parsedId;
+      }
+    }
+
+    const url = String(
+      anySource?.activity_url ??
+        anySource?.activityUrl ??
+        anySource?.activityURL ??
+        anySource?.url ??
+        ''
+    );
+
+    const urlMatch = url.match(/\/activities\/(\d+)/i);
+
+    if (urlMatch?.[1]) {
+      return Number(urlMatch[1]);
+    }
+
+    const excerpt = String(anySource?.excerpt ?? anySource?.text ?? '');
+
+    const excerptIdMatch = excerpt.match(/Activity\s*ID:\s*(\d+)/i);
+
+    if (excerptIdMatch?.[1]) {
+      return Number(excerptIdMatch[1]);
+    }
+
+    const excerptUrlMatch = excerpt.match(
+      /Activity\s*URL:\s*\/activities\/(\d+)/i
+    );
+
+    if (excerptUrlMatch?.[1]) {
+      return Number(excerptUrlMatch[1]);
+    }
+
+    return null;
+  }
+
+  private extractActivityTitle(
+    source: ChatSource,
+    activityId: number
+  ): string {
+    const anySource = source as any;
+
+    const directTitle =
+      anySource?.activity_name ??
+      anySource?.activityName ??
+      anySource?.activityNameEn ??
+      anySource?.title ??
+      anySource?.name ??
+      '';
+
+    if (String(directTitle).trim()) {
+      return this.truncateTitle(String(directTitle));
+    }
+
+    const excerpt = String(anySource?.excerpt ?? anySource?.text ?? '');
+    const nameMatch = excerpt.match(/Activity\s*Name:\s*([^.\n]+)/i);
+
+    if (nameMatch?.[1]?.trim()) {
+      return this.truncateTitle(nameMatch[1].trim());
+    }
+
+    return `View Activity ${activityId}`;
   }
 
   private truncateTitle(value: string): string {
