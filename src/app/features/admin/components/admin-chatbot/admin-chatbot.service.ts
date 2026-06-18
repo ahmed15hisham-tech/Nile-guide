@@ -29,7 +29,7 @@ export class AdminChatbotService {
     files: File[],
     chunkSize: number = 500,
     overlapSize: number = 20,
-  ): Observable<unknown> {
+  ): Observable<string> {
     const formData = new FormData();
 
     files.forEach((file) => {
@@ -39,7 +39,9 @@ export class AdminChatbotService {
     formData.append('chunk_size', String(chunkSize));
     formData.append('overlap_size', String(overlapSize));
 
-    return this.http.post(`${this.baseUrl}/multi-upload`, formData);
+    return this.http.post(`${this.baseUrl}/multi-upload`, formData, {
+      responseType: 'text',
+    });
   }
 
   updateFile(
@@ -47,7 +49,7 @@ export class AdminChatbotService {
     file: File,
     chunkSize: number = 500,
     overlapSize: number = 20,
-  ): Observable<unknown> {
+  ): Observable<string> {
     const formData = new FormData();
 
     formData.append('file', file, file.name);
@@ -57,10 +59,18 @@ export class AdminChatbotService {
     return this.http.put(
       `${this.baseUrl}/file/${encodeURIComponent(fileId)}`,
       formData,
+      {
+        responseType: 'text',
+      },
     );
   }
 
-  deleteFile(fileId: string): Observable<unknown> {
-    return this.http.delete(`${this.baseUrl}/file/${encodeURIComponent(fileId)}`);
+  deleteFile(fileId: string): Observable<string> {
+    return this.http.delete(
+      `${this.baseUrl}/file/${encodeURIComponent(fileId)}`,
+      {
+        responseType: 'text',
+      },
+    );
   }
 }

@@ -17,6 +17,11 @@ export class AdminChatbotComponent {
   private readonly adminChatbotService = inject(AdminChatbotService);
   private readonly cdr = inject(ChangeDetectorRef);
 
+  private readonly loadTimeoutMs = 60000;
+private readonly uploadTimeoutMs = 600000;
+private readonly updateTimeoutMs = 600000;
+private readonly deleteTimeoutMs = 60000;
+
   isOpen = false;
   isDragging = false;
 
@@ -53,7 +58,7 @@ export class AdminChatbotComponent {
 
     this.adminChatbotService
       .getFiles()
-      .pipe(timeout(15000))
+      .pipe(timeout(this.loadTimeoutMs))
       .subscribe({
         next: (response) => {
           console.log('AI files response:', response);
@@ -71,7 +76,7 @@ export class AdminChatbotComponent {
           this.uploadedFiles = [];
           this.isLoadingFiles = false;
 
-          if (error?.name === 'TimeoutError') {
+          if (this.isTimeoutError(error)) {
             this.errorMessage =
               'AI files server is not responding. Please try again.';
           } else {
@@ -125,14 +130,16 @@ export class AdminChatbotComponent {
   confirmFiles(): void {
     if (this.files.length === 0 || this.isUploading) return;
 
+    const selectedFiles = [...this.files];
+
     this.isUploading = true;
     this.errorMessage = '';
     this.successMessage = '';
 
     this.adminChatbotService
-      .uploadFiles(this.files)
+      .uploadFiles(selectedFiles)
       .pipe(
-        timeout(60000),
+        timeout(this.uploadTimeoutMs),
         finalize(() => {
           this.isUploading = false;
           this.cdr.detectChanges();
@@ -147,15 +154,20 @@ export class AdminChatbotComponent {
         error: (error) => {
           console.error('Failed to upload files', error);
 
-          if (error?.name === 'TimeoutError') {
-            this.errorMessage =
-              'Upload is taking too long. Please try again.';
-          } else {
-            this.errorMessage = this.getErrorMessage(
-              error,
-              'Failed to upload files.',
-            );
-          }
+         if (this.isTimeoutError(error)) {
+  this.errorMessage =
+    'AI server is still processing the file. Refreshing files list...';
+
+  this.refreshFilesAfterSlowRequest();
+  return;
+}
+
+          this.errorMessage = this.getErrorMessage(
+            error,
+            'Failed to upload files.',
+          );
+
+          this.refreshFilesAfterSlowRequest();
         },
       });
   }
@@ -195,7 +207,7 @@ export class AdminChatbotComponent {
     this.adminChatbotService
       .deleteFile(selectedFile.file_id)
       .pipe(
-        timeout(15000),
+        timeout(this.deleteTimeoutMs),
         finalize(() => {
           this.deletingFileId = null;
           this.cdr.detectChanges();
@@ -214,15 +226,19 @@ export class AdminChatbotComponent {
         error: (error) => {
           console.error('Failed to delete file', error);
 
-          if (error?.name === 'TimeoutError') {
+          if (this.isTimeoutError(error)) {
             this.errorMessage =
-              'Delete request is taking too long. Please try again.';
-          } else {
-            this.errorMessage = this.getErrorMessage(
-              error,
-              'Failed to delete file.',
-            );
+              'Delete request is taking too long. Refreshing files list...';
+
+            this.fileToDelete = null;
+            this.refreshFilesAfterSlowRequest();
+            return;
           }
+
+          this.errorMessage = this.getErrorMessage(
+            error,
+            'Failed to delete file.',
+          );
         },
       });
   }
@@ -290,7 +306,7 @@ export class AdminChatbotComponent {
     this.adminChatbotService
       .updateFile(asset.file_id, file)
       .pipe(
-        timeout(60000),
+        timeout(this.updateTimeoutMs),
         finalize(() => {
           this.updatingFileId = null;
           this.cdr.detectChanges();
@@ -304,15 +320,20 @@ export class AdminChatbotComponent {
         error: (error) => {
           console.error('Failed to update file', error);
 
-          if (error?.name === 'TimeoutError') {
+          if (this.isTimeoutError(error)) {
             this.errorMessage =
-              'Update request is taking too long. Please try again.';
-          } else {
-            this.errorMessage = this.getErrorMessage(
-              error,
-              'Failed to update file.',
-            );
+              'Update request is taking too long. The file may still be updated, refreshing files list...';
+
+            this.refreshFilesAfterSlowRequest();
+            return;
           }
+
+          this.errorMessage = this.getErrorMessage(
+            error,
+            'Failed to update file.',
+          );
+
+          this.refreshFilesAfterSlowRequest();
         },
       });
   }
@@ -333,6 +354,54 @@ export class AdminChatbotComponent {
 
     this.errorMessage = '';
     this.successMessage = '';
+  }
+
+  private refreshFilesAfterSlowRequest(retryCount: number = 0): void {
+  const maxRetries = 3;
+
+  setTimeout(() => {
+    this.adminChatbotService
+      .getFiles()
+      .pipe(timeout(this.loadTimeoutMs))
+      .subscribe({
+        next: (response) => {
+          this.uploadedFiles = Array.isArray(response?.assets)
+            ? response.assets
+            : [];
+
+          this.files = [];
+
+          this.errorMessage = '';
+          this.successMessage =
+            'Files list refreshed. Please check if your file appears below.';
+
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Failed to refresh AI files after slow request', error);
+
+          if (retryCount < maxRetries) {
+            this.errorMessage = `Files list is still loading. Retrying ${
+              retryCount + 1
+            }/${maxRetries}...`;
+
+            this.cdr.detectChanges();
+
+            this.refreshFilesAfterSlowRequest(retryCount + 1);
+            return;
+          }
+
+          this.errorMessage =
+            'The request took too long and files list could not be refreshed. Please click Refresh manually.';
+
+          this.cdr.detectChanges();
+        },
+      });
+  }, 3000);
+}
+
+  private isTimeoutError(error: unknown): boolean {
+    return (error as { name?: string })?.name === 'TimeoutError';
   }
 
   private getErrorMessage(error: unknown, fallback: string): string {
